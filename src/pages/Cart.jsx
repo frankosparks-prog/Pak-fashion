@@ -1,9 +1,11 @@
-import React from 'react';
-import { useCart } from '../context/CartContext';
-import { Trash2, Plus, Minus } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useCart } from "../context/CartContext";
+import { Trash2, Plus, Minus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { FaWhatsapp } from "react-icons/fa";
 
 function Cart() {
+  const phoneNumber = "254738380692";
   const { cartItems, removeFromCart, updateQuantity } = useCart();
   const navigate = useNavigate();
 
@@ -14,52 +16,84 @@ function Cart() {
 
   const handleCheckout = () => {
     if (cartItems.length === 0) {
-      alert('Your cart is empty!');
+      alert("Your cart is empty!");
     } else {
-      navigate('/checkout');
+      navigate("/checkout");
     }
   };
 
+  let message = "Hi, I'm interested in the following products:\n\n";
+  if (cartItems.length > 0) {
+    message += cartItems
+      .map(
+        (item, index) =>
+          `${index + 1}. *${item.name}*\n📦 Qty: ${item.quantity}\n💰 Price: Ksh ${item.price.toFixed(
+            2
+          )}\n🖼️ Image: ${item.image}\n`
+      )
+      .join("\n");
+    message += `\n\n🧾 *Subtotal:* Ksh ${subtotal.toFixed(
+      2
+    )}\n\nPlease provide more details.`;
+  } else {
+    message =
+      "Hi, I would like to inquire about some products, but my cart seems empty.";
+  }
+
+  const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+    message
+  )}`;
+
   return (
-    <div className="max-w-6xl mx-auto p-4 md:p-6 lg:p-8 mt-12 grid grid-cols-1 lg:grid-cols-3 gap-10">
+    <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-10 mt-14 grid grid-cols-1 lg:grid-cols-3 gap-10 bg-white">
       {/* Cart Items */}
       <section className="lg:col-span-2 space-y-6">
-        <h2 className="text-3xl font-bold text-blue-900 border-b pb-4">Your Cart 🛒</h2>
+        <h2 className="text-4xl font-extrabold text-black border-b pb-4">
+          Your Cart 🛒
+        </h2>
 
         {cartItems.length === 0 ? (
-          <p className="text-gray-600 text-lg">Your cart is currently empty.</p>
+          <p className="text-gray-500 text-lg">Your cart is currently empty.</p>
         ) : (
           cartItems.map((item) => (
             <div
               key={item.id}
-              className="flex items-center bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-4 gap-4"
+              className="flex items-center bg-white border border-gray-200 rounded-3xl shadow-sm hover:shadow-lg transition-all p-4 gap-4"
             >
               <img
                 src={item.image}
                 alt={item.name}
-                className="w-28 h-28 object-cover rounded-lg border"
+                className="w-28 h-28 object-cover rounded-xl border"
               />
               <div className="flex flex-col justify-between flex-grow">
                 <div>
-                  <h3 className="text-xl font-semibold text-blue-900">{item.name}</h3>
-                  <p className="text-blue-800 font-semibold mt-1">ksh {item.price.toFixed(2)}</p>
-                  <p className="text-gray-500 mt-2 text-sm line-clamp-2">{item.description}</p>
+                  <h3 className="text-xl font-bold text-black">
+                    {item.name}
+                  </h3>
+                  <p className="text-yellow-600 font-semibold mt-1">
+                    Ksh {item.price.toFixed(2)}
+                  </p>
+                  <p className="text-gray-500 mt-2 text-sm line-clamp-2">
+                    {item.description}
+                  </p>
                 </div>
 
                 <div className="flex items-center justify-between mt-4">
                   {/* Quantity Controls */}
-                  <div className="flex items-center border rounded-md overflow-hidden">
+                  <div className="flex items-center border rounded-full overflow-hidden bg-yellow-50">
                     <button
                       onClick={() => updateQuantity(item.id, -1)}
                       disabled={item.quantity <= 1}
-                      className="px-3 py-1 text-blue-600 hover:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                      className="px-3 py-1 text-yellow-700 hover:bg-yellow-200 disabled:opacity-50 disabled:cursor-not-allowed transition"
                     >
                       <Minus size={16} />
                     </button>
-                    <span className="px-4 font-medium text-blue-900">{item.quantity}</span>
+                    <span className="px-4 font-medium text-black">
+                      {item.quantity}
+                    </span>
                     <button
                       onClick={() => updateQuantity(item.id, 1)}
-                      className="px-3 py-1 text-blue-600 hover:bg-blue-100 transition"
+                      className="px-3 py-1 text-yellow-700 hover:bg-yellow-200 transition"
                     >
                       <Plus size={16} />
                     </button>
@@ -68,7 +102,8 @@ function Cart() {
                   {/* Remove Button */}
                   <button
                     onClick={() => removeFromCart(item.id)}
-                    className="text-red-600 hover:text-red-800 transition"
+                    className="text-red-500 hover:text-red-700 transition"
+                    title="Remove from Cart"
                   >
                     <Trash2 size={22} />
                   </button>
@@ -80,25 +115,25 @@ function Cart() {
       </section>
 
       {/* Order Summary */}
-      <aside className="bg-white shadow-sm rounded-xl p-6 h-fit sticky top-24">
-        <h3 className="text-2xl font-bold text-blue-900 mb-6 border-b pb-3">Order Summary</h3>
+      <aside className="bg-black text-white shadow-xl rounded-3xl p-6 h-fit sticky top-24">
+        <h3 className="text-3xl font-bold mb-6 border-b border-yellow-400 pb-3">
+          Order Summary
+        </h3>
 
-        <div className="flex justify-between text-lg font-semibold text-blue-800 mb-6">
+        <div className="flex justify-between text-lg font-semibold text-yellow-400 mb-8">
           <span>Subtotal</span>
-          <span>ksh {subtotal.toFixed(2)}</span>
+          <span>Ksh {subtotal.toFixed(2)}</span>
         </div>
 
-        <button
-          onClick={handleCheckout}
-          disabled={cartItems.length === 0}
-          className={`w-full py-3 rounded-full text-white text-lg font-semibold transition ${
-            cartItems.length === 0
-              ? 'bg-gray-400 cursor-not-allowed'
-              : 'bg-blue-700 hover:bg-blue-800'
-          }`}
+        <a
+          href={whatsappURL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full block text-center px-8 py-3 bg-yellow-500 hover:bg-yellow-600 text-black text-lg font-semibold rounded-full shadow-md transition-all flex items-center justify-center gap-2"
         >
-          Proceed to Checkout
-        </button>
+          <FaWhatsapp className="text-2xl" />
+          Buy/Book via WhatsApp
+        </a>
       </aside>
     </div>
   );
@@ -115,7 +150,7 @@ export default Cart;
 // function Cart() {
 //   const { cartItems, removeFromCart, updateQuantity } = useCart();
 //   const navigate = useNavigate();  // Initialize useNavigate
-  
+
 //   // Calculate subtotal
 //   const subtotal = cartItems.reduce(
 //     (total, item) => total + item.price * item.quantity,
@@ -203,5 +238,3 @@ export default Cart;
 // }
 
 // export default Cart;
-
-

@@ -21,15 +21,14 @@ function Checkout() {
       alert('Please enter a shipping address.');
       return;
     }
-    // Implement your real checkout logic here
     alert('Checkout successful!');
   };
 
   return (
-    <div className="max-w-6xl mx-auto mt-16 p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
-      {/* Left: Cart Items Summary */}
+    <div className="max-w-6xl mx-auto mt-16 p-4 md:p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* Cart Items Summary */}
       <section className="lg:col-span-2 space-y-6">
-        <h2 className="text-3xl font-extrabold text-blue-900 mb-6 border-b pb-3">
+        <h2 className="text-3xl font-extrabold text-black mb-6 border-b pb-3">
           Checkout 🛒
         </h2>
 
@@ -48,28 +47,32 @@ function Checkout() {
               />
               <div className="flex flex-col justify-between p-4 flex-grow">
                 <div>
-                  <h3 className="text-xl font-semibold text-blue-900">{item.name}</h3>
-                  <p className="text-blue-700 font-semibold mt-1">ksh {item.price.toFixed(2)}</p>
+                  <h3 className="text-xl font-semibold text-black">{item.name}</h3>
+                  <p className="text-yellow-600 font-semibold mt-1">
+                    Ksh {item.price.toFixed(2)}
+                  </p>
                 </div>
 
                 <div className="flex items-center justify-between mt-4">
+                  {/* Quantity */}
                   <div className="flex items-center border rounded-md overflow-hidden select-none">
                     <button
                       onClick={() => updateQuantity(item.id, -1)}
                       disabled={item.quantity <= 1}
-                      className={`px-3 py-1 text-blue-700 hover:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed transition`}
+                      className="px-3 py-1 text-yellow-700 hover:bg-yellow-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
                     >
                       <Minus size={16} />
                     </button>
-                    <span className="px-4 font-semibold text-blue-900">{item.quantity}</span>
+                    <span className="px-4 font-semibold text-black">{item.quantity}</span>
                     <button
                       onClick={() => updateQuantity(item.id, 1)}
-                      className="px-3 py-1 text-blue-700 hover:bg-blue-100 transition"
+                      className="px-3 py-1 text-yellow-700 hover:bg-yellow-100 transition"
                     >
                       <Plus size={16} />
                     </button>
                   </div>
 
+                  {/* Remove */}
                   <button
                     onClick={() => removeFromCart(item.id)}
                     className="text-red-600 hover:text-red-800 transition"
@@ -83,16 +86,16 @@ function Checkout() {
           ))
         )}
 
-        {/* Subtotal for smaller screens */}
-        <div className="block lg:hidden mt-6 border-t pt-4 text-right font-semibold text-blue-800 text-xl">
-          Subtotal: ksh {subtotal.toFixed(2)}
+        {/* Subtotal Mobile */}
+        <div className="block lg:hidden mt-6 border-t pt-4 text-right font-semibold text-black text-xl">
+          Subtotal: Ksh {subtotal.toFixed(2)}
         </div>
       </section>
 
-      {/* Right: Shipping & Payment Form + Summary */}
-      <aside className="bg-white rounded-xl shadow-md p-6 sticky top-28 h-fit space-y-8">
+      {/* Right: Shipping & Payment */}
+      <aside className="bg-white rounded-xl shadow-md p-6 sticky top-28 h-fit space-y-8 border border-yellow-100">
         <div>
-          <h3 className="text-2xl font-bold text-blue-900 mb-4 border-b pb-2">
+          <h3 className="text-2xl font-bold text-black mb-4 border-b pb-2">
             Shipping Address
           </h3>
           <input
@@ -100,18 +103,18 @@ function Checkout() {
             placeholder="Enter your address"
             value={shippingAddress}
             onChange={(e) => setShippingAddress(e.target.value)}
-            className="w-full p-3 border rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-yellow-300 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-500"
           />
         </div>
 
         <div>
-          <h3 className="text-2xl font-bold text-blue-900 mb-4 border-b pb-2">
+          <h3 className="text-2xl font-bold text-black mb-4 border-b pb-2">
             Payment Method
           </h3>
           <select
             value={paymentMethod}
             onChange={(e) => setPaymentMethod(e.target.value)}
-            className="w-full p-3 border rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-yellow-300 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-500"
           >
             <option value="credit-card">Credit Card</option>
             <option value="paypal">PayPal</option>
@@ -119,19 +122,20 @@ function Checkout() {
           </select>
         </div>
 
-        <div className="border-t pt-6 text-xl font-extrabold text-blue-900 flex justify-between">
+        <div className="border-t pt-6 text-xl font-extrabold text-black flex justify-between">
           <span>Subtotal</span>
-          <span>ksh {subtotal.toFixed(2)}</span>
+          <span>Ksh {subtotal.toFixed(2)}</span>
         </div>
 
         <button
           onClick={handleCheckout}
           disabled={cartItems.length === 0 || !shippingAddress.trim()}
-          className={`w-full py-3 rounded-full text-white text-lg font-semibold transition ${
-            cartItems.length === 0 || !shippingAddress.trim()
-              ? 'bg-gray-400 cursor-not-allowed'
-              : 'bg-blue-700 hover:bg-blue-800'
-          }`}
+          className={`w-full py-3 rounded-full text-white text-lg font-semibold transition 
+            ${
+              cartItems.length === 0 || !shippingAddress.trim()
+                ? 'bg-gray-300 cursor-not-allowed'
+                : 'bg-yellow-500 hover:bg-yellow-600'
+            }`}
         >
           Complete Purchase
         </button>
@@ -141,6 +145,7 @@ function Checkout() {
 }
 
 export default Checkout;
+
 
 
 

@@ -87,7 +87,7 @@ function BlogPost() {
     return (
       <div className="flex justify-center items-center py-20">
         {" "}
-        <CircularProgress style={{ color: "#D97706" }} />
+        <CircularProgress style={{ color: "black" }} />
       </div>
     );
 const formatDateWithSuffix = (dateStr) => {

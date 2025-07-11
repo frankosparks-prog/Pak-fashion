@@ -92,11 +92,11 @@ const SearchModal = ({ isOpen, onClose }) => {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search for products..."
-            className="flex-grow border border-green-400 px-4 py-2 rounded-l-full focus:outline-none"
+            className="flex-grow border border-yellow-400 px-4 py-2 rounded-l-full focus:outline-none"
           />
           <button
             type="submit"
-            className="bg-green-700 text-white px-4 py-2 rounded-r-full hover:bg-green-800"
+            className="bg-yellow-500 text-black font-semibold px-4 py-2 rounded-r-full hover:bg-green-600"
           >
             Search
           </button>

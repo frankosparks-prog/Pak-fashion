@@ -10,25 +10,11 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import CircularProgress from "@mui/material/CircularProgress";
+
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 AOS.init();
-
-const sampleProducts = Array.from({ length: 12 }).map((_, i) => ({
-  id: i + 1,
-  name: `Sample Product ${i + 1}`,
-  image: `https://picsum.photos/300/300?random=${i + 1}`,
-  price: 1000 + i * 100,
-  category: [
-    "Men's Clothing",
-    "Women's Clothing",
-    "Kids' Clothing",
-    "Shoes",
-    "Bags & Accessories",
-  ][i % 7],
-  tag: ["New Arrival", "Bestseller", "Featured"][i % 3],
-  dateAdded: Date.now() - i * 10000000,
-  rating: 5 - (i % 5),
-}));
 
 function Shop() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -37,6 +23,11 @@ function Shop() {
   const [sortOption, setSortOption] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [likedProducts, setLikedProducts] = useState([]);
+  const [floatingHearts, setFloatingHearts] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
   const itemsPerPage = 6;
   const { addToCart } = useCart();
 
@@ -44,35 +35,44 @@ function Shop() {
     AOS.refresh();
   }, []);
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const params = new URLSearchParams();
+
+        if (searchTerm) params.append("search", searchTerm);
+        if (selectedCategories.length)
+          selectedCategories.forEach((c) => params.append("category", c));
+        if (maxPrice) params.append("maxPrice", maxPrice);
+        if (sortOption) params.append("sort", sortOption);
+
+        const res = await fetch(
+          `${SERVER_URL}/api/products?${params.toString()}`
+        );
+        const data = await res.json();
+        setProducts(data);
+      } catch (err) {
+        setError("Failed to load products.");
+        console.error("Error fetching products:", err);
+      }
+      setLoading(false);
+    };
+
+    fetchProducts();
+  }, [searchTerm, selectedCategories, maxPrice, sortOption]);
+
   const handleCategoryChange = (category) => {
     setSelectedCategories((prev) =>
       prev.includes(category)
         ? prev.filter((c) => c !== category)
         : [...prev, category]
     );
-    setCurrentPage(1); // Reset page when filtering
+    setCurrentPage(1);
   };
 
-  const filteredProducts = sampleProducts
-    .filter((p) => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
-    .filter((p) =>
-      selectedCategories.length ? selectedCategories.includes(p.category) : true
-    )
-    .filter((p) => p.price <= maxPrice)
-    .sort((a, b) => {
-      switch (sortOption) {
-        case "price-low":
-          return a.price - b.price;
-        case "price-high":
-          return b.price - a.price;
-        case "newest":
-          return b.dateAdded - a.dateAdded;
-        case "rated":
-          return b.rating - a.rating;
-        default:
-          return 0;
-      }
-    });
+  const filteredProducts = products;
 
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const paginatedProducts = filteredProducts.slice(
@@ -80,12 +80,40 @@ function Shop() {
     currentPage * itemsPerPage
   );
 
-  const toggleLike = (productId) => {
-    setLikedProducts((prev) =>
-      prev.includes(productId)
-        ? prev.filter((id) => id !== productId)
-        : [...prev, productId]
-    );
+  const toggleLike = async (productId) => {
+    try {
+      const response = await fetch(
+        `${SERVER_URL}/api/products/like/${productId}`,
+        {
+          method: "POST",
+        }
+      );
+      const data = await response.json();
+      if (data.success) {
+        setLikedProducts((prev) =>
+          prev.map((product) =>
+            product._id === productId
+              ? { ...product, likes: data.likes }
+              : product
+          )
+        );
+        const newHeart = { id: Date.now(), productId };
+        setFloatingHearts((prev) => [...prev, newHeart]);
+
+        // Remove after animation
+        setTimeout(() => {
+          setFloatingHearts((prev) => prev.filter((h) => h.id !== newHeart.id));
+        }, 1200);
+      }
+    } catch (error) {
+      console.error("Failed to like product:", error);
+    }
+
+    // setLikedProducts((prev) =>
+    //   prev.includes(productId)
+    //     ? prev.filter((id) => id !== productId)
+    //     : [...prev, productId]
+    // );
   };
 
   const categories = [
@@ -94,6 +122,7 @@ function Shop() {
     "Kids' Clothing",
     "Shoes",
     "Bags & Accessories",
+    "Clearance Sale",
   ];
 
   const tags = ["New Arrival", "Bestseller", "Featured"];
@@ -113,67 +142,54 @@ function Shop() {
   };
 
   return (
-    <div className="bg-gradient-to-b from-blue-50 to-white min-h-screen px-6 py-12 sm:px-12 lg:px-20 mt-12 font-sans text-blue-900">
+    <div className="bg-white min-h-screen px-6 py-12 sm:px-12 lg:px-20 mt-12 font-sans text-black">
       {/* Hero */}
       <header className="text-center mb-12" data-aos="fade-down">
-        <h1 className="text-5xl font-extrabold tracking-tight mb-3 text-gradient bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-400">
+        <h1 className="text-5xl font-extrabold tracking-tight mb-3 text-black">
           Shop Our Collection
         </h1>
-        <div className="mx-auto max-w-3xl text-blue-700 text-lg">
-          <p>
-            Discover handcrafted jewelry made with love and tradition. Find your
-            perfect piece today.
-          </p>
-          <div className="h-1 w-28 bg-blue-400 rounded-full mx-auto mt-4"></div>
-        </div>
+        <p className="text-yellow-700 font-medium text-lg">
+          Discover stylish pieces made with love and tradition.
+        </p>
+        <div className="h-1 w-28 bg-yellow-500 rounded-full mx-auto mt-4"></div>
       </header>
 
       <div className="flex flex-col md:flex-row gap-10">
         {/* Filters Sidebar */}
-        <aside
-          className="md:w-1/4 bg-white p-8 rounded-2xl shadow-lg border border-blue-100 sticky top-24 self-start"
-          // data-aos="fade-right"
-          aria-label="Filters Sidebar"
-        >
+        <aside className="md:w-1/4 w-full bg-yellow-50 p-8 rounded-2xl shadow border border-yellow-200 md:sticky top-24 self-start text-black">
           <div className="space-y-10">
             {/* Search */}
             <div>
-              <h2 className="text-2xl font-semibold mb-5 border-b border-blue-200 pb-2">
-                Search Products
-              </h2>
-              <div className="relative text-blue-600 focus-within:text-blue-900">
-                <FaSearch className="absolute left-4 top-3.5 pointer-events-none" />
+              <h2 className="text-2xl font-semibold mb-5">Search Products</h2>
+              <div className="relative">
+                <FaSearch className="absolute left-4 top-3.5 text-yellow-600" />
                 <input
                   type="text"
                   placeholder="Search products..."
-                  className="w-full pl-12 pr-4 py-3 border border-blue-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  className="w-full pl-12 pr-4 py-3 border border-yellow-300 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-500 transition"
                   value={searchTerm}
                   onChange={(e) => {
                     setSearchTerm(e.target.value);
                     setCurrentPage(1);
                   }}
-                  aria-label="Search products"
                 />
               </div>
             </div>
 
             {/* Categories */}
             <div>
-              <h3 className="font-semibold text-xl mb-5 border-b border-blue-200 pb-2">
-                Categories
-              </h3>
+              <h3 className="text-xl font-semibold mb-5">Categories</h3>
               <div className="flex flex-col space-y-4 max-h-52 overflow-auto pr-2">
                 {categories.map((cat) => (
                   <label
                     key={cat}
-                    className="inline-flex items-center space-x-3 cursor-pointer text-blue-800 hover:text-blue-600 transition select-none"
+                    className="inline-flex items-center space-x-3 text-black cursor-pointer"
                   >
                     <input
                       type="checkbox"
                       checked={selectedCategories.includes(cat)}
                       onChange={() => handleCategoryChange(cat)}
-                      className="form-checkbox h-5 w-5 text-blue-600"
-                      aria-checked={selectedCategories.includes(cat)}
+                      className="form-checkbox h-5 w-5 text-yellow-600"
                     />
                     <span className="text-lg">{cat}</span>
                   </label>
@@ -183,9 +199,9 @@ function Shop() {
 
             {/* Max Price */}
             <div>
-              <h3 className="font-semibold text-xl mb-4 border-b border-blue-200 pb-2">
+              <h3 className="text-xl font-semibold mb-4">
                 Max Price:{" "}
-                <span className="text-blue-700 font-semibold">
+                <span className="text-yellow-600 font-bold">
                   Ksh {maxPrice}
                 </span>
               </h3>
@@ -198,24 +214,18 @@ function Shop() {
                   setMaxPrice(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="w-full accent-blue-600"
-                aria-valuemin={100}
-                aria-valuemax={5000}
-                aria-valuenow={maxPrice}
-                aria-label="Max price filter"
+                className="w-full accent-yellow-600"
               />
             </div>
 
             {/* Tags */}
             <div>
-              <h3 className="font-semibold text-xl mb-5 border-b border-blue-200 pb-2">
-                Popular Tags
-              </h3>
+              <h3 className="text-xl font-semibold mb-5">Popular Tags</h3>
               <div className="flex flex-wrap gap-3">
                 {tags.map((tag) => (
                   <span
                     key={tag}
-                    className="bg-blue-100 text-blue-700 px-4 py-1 rounded-full text-sm font-medium select-none shadow-sm"
+                    className="bg-yellow-100 text-yellow-700 px-4 py-1 rounded-full text-sm font-medium"
                   >
                     {tag}
                   </span>
@@ -232,14 +242,13 @@ function Shop() {
             className="flex justify-between items-center mb-8"
             data-aos="fade-left"
           >
-            <div className="text-lg font-semibold text-blue-800">
+            <div className="text-lg font-semibold">
               {filteredProducts.length} Products Found
             </div>
             <select
-              className="border border-blue-300 p-3 rounded-md text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border border-yellow-400 p-3 rounded-md text-black focus:ring-2 focus:ring-yellow-500"
               value={sortOption}
               onChange={(e) => setSortOption(e.target.value)}
-              aria-label="Sort products"
             >
               <option value="">Sort By</option>
               <option value="price-low">Price: Low to High</option>
@@ -250,128 +259,124 @@ function Shop() {
           </div>
 
           {/* Product Grid */}
-          <div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10"
-            data-aos="fade-up"
-          >
-            {paginatedProducts.length === 0 && (
-              <p className="text-center text-blue-500 col-span-full">
-                No products match your filters.
-              </p>
-            )}
-            {paginatedProducts.map((product) => (
-              <article
-                key={product.id}
-                className="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-2xl transition-shadow duration-300 cursor-pointer relative"
-                data-aos="zoom-in"
-              >
-                {/* <Link to={`/product/${product.id}`} aria-label={`View ${product.name}`}>
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-72 object-cover transition-transform duration-300 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                </Link> */}
-                <div className="relative">
-                  <Link
-                    to={`/product/${product.id}`}
-                    aria-label={`View ${product.name}`}
-                  >
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-72 object-cover transition-transform duration-300 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                  </Link>
-                  <span className="absolute top-3 left-3 bg-amber-600 text-white text-xs px-3 py-1 rounded-full shadow-md font-medium">
-                    {product.tag}
-                  </span>
-                </div>
-
-                <div className="p-5 flex flex-col justify-between h-56">
-                  <div>
-                    <h3 className="font-semibold text-xl text-blue-900 mb-2 truncate">
-                      {product.name}
-                    </h3>
-                    <div className="flex items-center space-x-2 mb-3">
-                      {renderStars(product.rating)}
-                      <span className="text-sm text-blue-600 font-medium">
-                        ({product.rating})
-                      </span>
+          {loading ? (
+            <div className="flex justify-center items-center py-20">
+              <CircularProgress style={{ color: "black" }} />{" "}
+            </div>
+          ) : error ? (
+            <p className="text-center text-red-600 bg-red-100 border border-red-300 px-4 py-2 rounded-md w-fit mx-auto font-semibold mb-6">
+              {error}
+            </p>
+          ) : (
+            <div
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10"
+              data-aos="fade-up"
+            >
+              {paginatedProducts.length === 0 && (
+                <p className="text-center text-yellow-600 col-span-full">
+                  No products match your filters.
+                </p>
+              )}
+              {paginatedProducts.map((product) => (
+                <article
+                  key={product._id}
+                  className="bg-white border border-yellow-100 rounded-2xl shadow-lg hover:shadow-2xl transition overflow-hidden group cursor-pointer"
+                  data-aos="zoom-in"
+                >
+                  <div className="relative">
+                    {/* Floating hearts */}
+                    {floatingHearts
+                      .filter((h) => h.productId === product._id)
+                      .map((heart) => (
+                        <div
+                          key={heart.id}
+                          className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-pink-500 text-2xl pointer-events-none"
+                          style={{
+                            animation: "floatHeart 1.2s ease-out forwards",
+                          }}
+                        >
+                          ❤️❤️
+                        </div>
+                      ))}
+                    <Link to={`/product/${product._id}`}>
+                      <img
+                        src={product._image}
+                        alt={product.name}
+                        className="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </Link>
+                    <span className="absolute top-3 left-3 bg-yellow-600 text-white text-xs px-3 py-1 rounded-full shadow font-medium">
+                      {product.tag}
+                    </span>
+                  </div>
+                  <div className="p-5 flex flex-col justify-between h-56">
+                    <div>
+                      <h3 className="font-semibold text-xl mb-2 truncate">
+                        {product.name}
+                      </h3>
+                      <div className="flex items-center space-x-2 mb-2">
+                        {renderStars(product.rating)}
+                        <span className="text-sm text-yellow-600 font-medium">
+                          ({product.rating})
+                        </span>
+                      </div>
+                      <p className="text-lg font-bold text-black">
+                        Ksh {product.price.toLocaleString()}
+                      </p>
                     </div>
-                    <p className="text-lg font-bold text-blue-800">
-                      Ksh {product.price.toLocaleString()}
-                    </p>
+                    <div className="mt-4 flex justify-between items-center">
+                      <button
+                        onClick={() => toggleLike(product._id)}
+                        className={`p-2 rounded-full ${
+                          likedProducts.includes(product._id)
+                            ? "bg-yellow-200 text-red-600 animate-pulse"
+                            : "text-yellow-500 hover:bg-yellow-100"
+                        }`}
+                      >
+                        <FaHeart size={20} />
+                      </button>
+                      <button
+                        onClick={() => addToCart(product)}
+                        className="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-full font-semibold flex items-center gap-2"
+                      >
+                        <FaCartPlus /> Add to Cart
+                      </button>
+                    </div>
                   </div>
-
-                  <div className="mt-4 flex justify-between items-center">
-                    <button
-                      aria-pressed={likedProducts.includes(product.id)}
-                      onClick={() => toggleLike(product.id)}
-                      className={`p-2 rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                        likedProducts.includes(product.id)
-                          ? "bg-red-100 text-red-500"
-                          : "text-blue-400 hover:bg-blue-100"
-                      }`}
-                      title={
-                        likedProducts.includes(product.id)
-                          ? "Remove from Wishlist"
-                          : "Add to Wishlist"
-                      }
-                    >
-                      <FaHeart size={20} />
-                    </button>
-
-                    <button
-                      onClick={() => addToCart(product)}
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full font-semibold flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                      aria-label={`Add ${product.name} to cart`}
-                    >
-                      <FaCartPlus /> Add to Cart
-                    </button>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-
+                </article>
+              ))}
+            </div>
+          )}
           {/* Pagination */}
           <nav
-            aria-label="Product pagination"
             className="mt-12 flex justify-center items-center space-x-3"
+            aria-label="Pagination"
             data-aos="fade-up"
           >
             <button
               onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
               disabled={currentPage === 1}
-              className="px-4 py-2 rounded-full border border-blue-400 text-blue-600 disabled:text-blue-200 disabled:border-blue-200 hover:bg-blue-100 transition"
-              aria-label="Previous page"
+              className="px-4 py-2 rounded-full border border-yellow-500 text-yellow-600 disabled:text-yellow-300 disabled:border-yellow-200 hover:bg-yellow-100"
             >
               &lt;
             </button>
-
             {[...Array(totalPages).keys()].map((page) => (
               <button
                 key={page + 1}
                 onClick={() => setCurrentPage(page + 1)}
-                aria-current={currentPage === page + 1 ? "page" : undefined}
-                className={`px-4 py-2 rounded-full border text-blue-600 border-blue-400 hover:bg-blue-200 transition ${
+                className={`px-4 py-2 rounded-full border text-yellow-600 border-yellow-500 hover:bg-yellow-200 ${
                   currentPage === page + 1
-                    ? "bg-blue-600 text-white font-semibold"
+                    ? "bg-yellow-600 text-white font-semibold"
                     : "bg-white"
                 }`}
               >
                 {page + 1}
               </button>
             ))}
-
             <button
               onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
               disabled={currentPage === totalPages}
-              className="px-4 py-2 rounded-full border border-blue-400 text-blue-600 disabled:text-blue-200 disabled:border-blue-200 hover:bg-blue-100 transition"
-              aria-label="Next page"
+              className="px-4 py-2 rounded-full border border-yellow-500 text-yellow-600 disabled:text-yellow-300 disabled:border-yellow-200 hover:bg-yellow-100"
             >
               &gt;
             </button>
@@ -581,7 +586,7 @@ export default Shop;
 //                 >
 //                   <Link to={`/product/${product._id}`}>
 //                     <img
-//                       src={product.image}
+//                       src={product._image}
 //                       alt={product.name}
 //                       className="w-full h-64 object-cover rounded-lg mb-4"
 //                     />

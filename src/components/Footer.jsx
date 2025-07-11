@@ -78,7 +78,6 @@
 // }
 
 // export default Footer;
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Mail } from 'lucide-react';
@@ -88,25 +87,25 @@ function Footer() {
 
   return (
     <>
-      <footer className="bg-blue-900 text-white py-12 px-6 mt-20">
+      <footer className="bg-black text-white py-12 px-6 mt-20">
         <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-12 text-center sm:text-left">
           {/* Branding */}
           <div>
-            <h3 className="text-2xl font-bold mb-3 tracking-wide">Pak Fashion</h3>
-            <p className="text-sm text-blue-300 max-w-xs mx-auto sm:mx-0 leading-relaxed">
+            <h3 className="text-2xl font-bold mb-3 tracking-wide text-yellow-500">Pak Fashions</h3>
+            <p className="text-sm text-gray-400 max-w-xs mx-auto sm:mx-0 leading-relaxed">
               Clothes designed with passion, to inspire. Made with love.
             </p>
           </div>
 
           {/* Quick Links */}
           <nav>
-            <h4 className="text-xl font-semibold mb-4">Quick Links</h4>
+            <h4 className="text-xl font-semibold mb-4 text-yellow-400">Quick Links</h4>
             <ul className="space-y-3 text-sm font-medium">
-              {['Home', 'Shop', 'Blog', 'About', 'Contact'].map((page) => (
+              {['Home', 'Shop', 'Blog', 'About', 'Contact', 'FAQs', 'Testimonials'].map((page) => (
                 <li key={page}>
                   <Link
                     to={`/${page.toLowerCase()}`}
-                    className="hover:text-blue-400 transition-colors"
+                    className="hover:text-yellow-500 transition-colors"
                   >
                     {page}
                   </Link>
@@ -115,7 +114,7 @@ function Footer() {
               <li>
                 <button
                   onClick={() => setShowModal(true)}
-                  className="hover:text-blue-400 transition-colors focus:outline-none"
+                  className="hover:text-yellow-500 transition-colors focus:outline-none"
                 >
                   Terms & Returns
                 </button>
@@ -125,39 +124,43 @@ function Footer() {
 
           {/* Contact + Social */}
           <div>
-            <h4 className="text-xl font-semibold mb-4">Connect with Us</h4>
+            <h4 className="text-xl font-semibold mb-4 text-yellow-400">Connect with Us</h4>
             <div className="flex justify-center sm:justify-start gap-5 mb-4">
-              {[{
-                href: 'https://facebook.com',
-                icon: <Facebook />,
-                label: 'Facebook'
-              }, {
-                href: 'https://instagram.com',
-                icon: <Instagram />,
-                label: 'Instagram'
-              }, {
-                href: 'mailto:info@pakfashion.com',
-                icon: <Mail />,
-                label: 'Email'
-              }].map(({ href, icon, label }) => (
+              {[
+                {
+                  href: 'https://facebook.com',
+                  icon: <Facebook />,
+                  label: 'Facebook'
+                },
+                {
+                  href: 'https://instagram.com',
+                  icon: <Instagram />,
+                  label: 'Instagram'
+                },
+                {
+                  href: 'mailto:info@pakfashion.com',
+                  icon: <Mail />,
+                  label: 'Email'
+                }
+              ].map(({ href, icon, label }) => (
                 <a
                   key={label}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-800 hover:bg-blue-700 transition text-white shadow-md"
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-yellow-600 hover:bg-yellow-700 transition text-white shadow-md"
                 >
                   {icon}
                 </a>
               ))}
             </div>
-            <p className="text-sm text-blue-300 font-mono select-all">info@pakfashion.com</p>
+            <p className="text-sm text-gray-400 font-mono select-all">info@pakfashion.com</p>
           </div>
         </div>
 
-        <div className="border-t border-blue-700 mt-12 pt-6 text-sm text-blue-300 text-center">
-          &copy; {new Date().getFullYear()} Pak Fashion. All rights reserved.
+        <div className="border-t border-gray-700 mt-12 pt-6 text-sm text-gray-400 text-center">
+          &copy; {new Date().getFullYear()} Pak Fashions. All rights reserved.
         </div>
       </footer>
 
@@ -174,10 +177,14 @@ function Footer() {
             </button>
             <h2 className="text-xl font-bold mb-5 text-gray-900">Terms of Service & Returns</h2>
             <p className="text-gray-700 mb-4 leading-relaxed">
-              All items are handmade with care. Orders are processed within 2–3 business days. Due to the custom nature of our products, we only accept returns for defective or damaged items.
+              All items are handmade with care. Orders are processed within 2–3 business days.
+              Due to the custom nature of our products, we only accept returns for defective or
+              damaged items.
             </p>
             <p className="text-gray-700 leading-relaxed">
-              If you have any issues with your order, please contact us within 7 days of delivery. Returns must be unused and in original packaging. Shipping costs are non-refundable.
+              If you have any issues with your order, please contact us within 7 days of
+              delivery. Returns must be unused and in original packaging. Shipping costs are
+              non-refundable.
             </p>
           </div>
         </div>

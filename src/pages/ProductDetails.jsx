@@ -1,27 +1,97 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaHeart, FaStar, FaCartPlus } from "react-icons/fa";
 import { useParams, Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import axios from "axios";
+import CircularProgress from "@mui/material/CircularProgress";
 
-// ─── Sample data ───────────────────────────────────────────
-const sampleProducts = Array.from({ length: 12 }).map((_, i) => ({
-  id: (i + 1).toString(),
-  name: `Sample Product ${i + 1}`,
-  image: `https://picsum.photos/600/600?random=${i + 1}`,
-  price: 1000 + i * 100,
-  description:
-    "This is a beautifully designed cloth, made with love and precision. Ideal for any occasion.",
-  rating: 5 - (i % 5),
-  category: ["Jewelry", "Decor", "Necklaces", "Bracelets", "Earrings"][i % 5],
-  inStock: i % 3 !== 0 // roughly 2 / 3 of items are in stock
-}));
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
-// ─── Component ─────────────────────────────────────────────
 const ProductDetails = () => {
   const { id } = useParams();
-  const product = sampleProducts.find((p) => p.id === id);
   const [liked, setLiked] = useState(false);
+  const [floatingHearts, setFloatingHearts] = useState([]);
+  const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [relatedLoading, setRelatedLoading] = useState(true);
   const { addToCart } = useCart();
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await axios.get(`${SERVER_URL}/api/products/${id}`);
+        setProduct(res.data);
+        setLoading(false);
+
+        // Fetch related products after main product is loaded
+        fetchRelatedProducts(res.data.category, res.data._id);
+      } catch (err) {
+        console.error("Failed to fetch product", err);
+        setLoading(false);
+      }
+    };
+
+    const fetchRelatedProducts = async (category, currentId) => {
+      try {
+        const res = await axios.get(`${SERVER_URL}/api/products`);
+        const filtered = res.data.filter(
+          (p) => p.category === category && p._id !== currentId
+        );
+        setRelatedProducts(filtered);
+        setRelatedLoading(false);
+      } catch (err) {
+        console.error("Failed to fetch related products", err);
+        setRelatedLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
+
+  const toggleLike = async (productId) => {
+    try {
+      const response = await fetch(
+        `${SERVER_URL}/api/products/like/${productId}`,
+        {
+          method: "POST",
+        }
+      );
+      const data = await response.json();
+      if (data.success) {
+        setLiked((prev) =>
+          prev.map((product) =>
+            product._id === productId
+              ? { ...product, likes: data.likes }
+              : product
+          )
+        );
+        const newHeart = { id: Date.now(), productId };
+        setFloatingHearts((prev) => [...prev, newHeart]);
+
+        // Remove after animation
+        setTimeout(() => {
+          setFloatingHearts((prev) => prev.filter((h) => h.id !== newHeart.id));
+        }, 1200);
+      }
+    } catch (error) {
+      console.error("Failed to like product:", error);
+    }
+
+    // setLikedProducts((prev) =>
+    //   prev.includes(productId)
+    //     ? prev.filter((id) => id !== productId)
+    //     : [...prev, productId]
+    // );
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-20">
+        <CircularProgress style={{ color: "black" }} />
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -31,42 +101,48 @@ const ProductDetails = () => {
     );
   }
 
-  // Filter similar items (same category, not the current product)
-  const similarProducts = sampleProducts.filter(
-    (p) => p.category === product.category && p.id !== product.id
-  );
-
-  const toggleLike = () => setLiked((prev) => !prev);
-
   return (
     <>
-      {/* ── Product Card ────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-white shadow-xl rounded-2xl p-8 md:p-12">
-          {/* Image */}
-          <div className="overflow-hidden rounded-xl shadow-md">
+      {/* Product Section */}
+      <section className="bg-white text-black px-6 py-16 mt-12">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center bg-yellow-50 shadow-2xl rounded-3xl p-8 md:p-14">
+          {/* Product Image */}
+          <div className="overflow-hidden rounded-xl shadow-xl">
+            {/* Floating hearts */}
+            {floatingHearts
+              .filter((h) => h.productId === product._id)
+              .map((heart) => (
+                <div
+                  key={heart.id}
+                  className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-pink-500 text-2xl pointer-events-none"
+                  style={{
+                    animation: "floatHeart 1.2s ease-out forwards",
+                  }}
+                >
+                  ❤️❤️
+                </div>
+              ))}
             <img
               src={product.image}
               alt={product.name}
-              className="w-full object-cover hover:scale-105 transition-transform duration-500"
+              className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
             />
           </div>
 
-          {/* Info */}
+          {/* Product Info */}
           <div className="space-y-6">
-            <h1 className="text-4xl font-bold text-slate-800">
+            <h1 className="text-4xl font-extrabold tracking-tight text-black">
               {product.name}
             </h1>
 
-            {/* Price + Stock Badge */}
             <div className="flex items-center gap-4">
-              <p className="text-2xl text-emerald-600 font-semibold">
+              <p className="text-2xl font-bold text-green-600">
                 Ksh {product.price.toLocaleString()}
               </p>
               <span
                 className={`px-3 py-1 rounded-full text-xs font-medium ${
                   product.inStock
-                    ? "bg-emerald-100 text-emerald-700"
+                    ? "bg-green-100 text-green-700"
                     : "bg-rose-100 text-rose-700"
                 }`}
               >
@@ -74,7 +150,6 @@ const ProductDetails = () => {
               </span>
             </div>
 
-            {/* Rating */}
             <div className="flex items-center gap-1">
               {[...Array(5)].map((_, i) => (
                 <FaStar
@@ -88,19 +163,27 @@ const ProductDetails = () => {
                 {product.rating} / 5
               </span>
             </div>
+            <p className="inline-block text-sm font-semibold text-green-800 bg-green-100 rounded-full px-4 py-1 shadow-sm border border-green-200">
+              Size:{" "}
+              <span className="ml-1 text-black font-semibold">
+                {product.size}
+              </span>
+            </p>
 
-            <p className="text-gray-700 leading-relaxed">{product.description}</p>
+            <p className="text-gray-700 leading-relaxed">
+              {product.description}
+            </p>
 
-            {/* Buttons */}
-            <div className="flex gap-4 items-center pt-4">
+            {/* Action Buttons */}
+            <div className="flex gap-4 pt-4">
               <button
-                onClick={toggleLike}
-                className={`rounded-full p-3 border-2 transition-all duration-300 ${
+                onClick={() => toggleLike(product._id)}
+                title={liked ? "Unlike" : "Like"}
+                className={`rounded-full p-3 h-14 w-14 text-lg border-2 transition-all duration-300 flex justify-center items-center ${
                   liked
                     ? "bg-red-100 border-red-500 text-red-500 animate-pulse"
-                    : "bg-white border-slate-400 text-slate-600 hover:bg-slate-100"
+                    : "bg-white border-gray-400 text-gray-700 hover:bg-gray-100"
                 }`}
-                title={liked ? "Unlike" : "Like"}
               >
                 <FaHeart />
               </button>
@@ -108,66 +191,66 @@ const ProductDetails = () => {
               <button
                 onClick={() => addToCart(product)}
                 disabled={!product.inStock}
-                className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all
-                  ${
-                    product.inStock
-                      ? "bg-emerald-600 text-white hover:bg-emerald-700"
-                      : "bg-slate-300 text-slate-500 cursor-not-allowed"
-                  }`}
+                className={`flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-lg transition-all duration-300 ${
+                  product.inStock
+                    ? "bg-green-600 text-white hover:bg-green-700"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                }`}
               >
-                <FaCartPlus className="text-lg" />
+                <FaCartPlus />
                 Add to Cart
               </button>
             </div>
 
             <Link
               to="/shop"
-              className="inline-block mt-6 text-sm text-blue-600 hover:underline"
+              className="block text-sm text-blue-700 hover:underline mt-6"
             >
               ← Back to Shop
             </Link>
           </div>
         </div>
       </section>
-
-      {/* ── Similar Products Carousel ───────────────────────── */}
-      {similarProducts.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 pb-16">
-          <h2 className="text-2xl font-semibold text-slate-800 mb-6">
-            Similar {product.category}
-          </h2>
-
-          <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-2">
-            {similarProducts.map((item) => (
+      {/* Related Products */}
+      <div className="mt-14">
+        <h3 className="text-xl font-semibold mb-4 text-blue-800 text-center">
+          You might also like
+        </h3>
+        {relatedLoading ? (
+          <div className="flex justify-center py-10">
+            <CircularProgress style={{ color: "#D97706" }} />
+          </div>
+        ) : relatedProducts.length === 0 ? (
+          <p className="text-gray-500">No related products found.</p>
+        ) : (
+          <div className="flex overflow-x-auto space-x-6 pb-4 scrollbar-thin scrollbar-thumb-blue-500">
+            {relatedProducts.map((p) => (
               <Link
-                key={item.id}
-                to={`/product/${item.id}`}
-                className="min-w-[220px] snap-start bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition"
+                to={`/product/${p._id}`}
+                key={p._id}
+                className="min-w-[200px] bg-white border rounded-lg shadow hover:shadow-lg transition p-4"
               >
                 <img
-                  src={item.image}
-                  alt={item.name}
-                  className="h-44 w-full object-cover"
+                  src={p.image}
+                  alt={p.name}
+                  className="h-48 w-full object-cover rounded mb-2"
                 />
-                <div className="p-4 space-y-1">
-                  <p className="font-medium text-slate-800 truncate">
-                    {item.name}
-                  </p>
-                  <p className="text-sm text-emerald-600 font-semibold">
-                    Ksh {item.price.toLocaleString()}
-                  </p>
-                </div>
+                <h4 className="text-md font-semibold font-medium text-black truncate">
+                  {p.name}
+                </h4>
+                <p className="text-sm text-green-600 font-semibold">
+                  Ksh {p.price}
+                </p>
               </Link>
             ))}
           </div>
-        </section>
-      )}
+        )}
+      </div>
     </>
   );
 };
 
 export default ProductDetails;
-
 
 // // Add a "You might also like" section at the bottom with related products.
 

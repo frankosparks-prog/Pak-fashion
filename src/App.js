@@ -52,6 +52,8 @@ import ManageProducts from "./components/Admin/ManageProducts";
 import UserDetails from "./components/Admin/UserDetails";
 import AdminLogin from "./components/Admin/AdminLogin";
 import ThankYouPage from "./pages/ThankYou";
+import FAQs from "./pages/FAQs";
+import Testimonials from "./pages/Testimonials";
 
 // 👇 create a wrapper component to manage layout
 function AppLayout() {
@@ -86,8 +88,8 @@ function AppLayout() {
   position="top-right"
   toastOptions={{
     style: {
-      background: 'linear-gradient(to right, #1e293b, #0f172a)', // dark slate to navy
-      color: '#f1f5f9', // light slate text
+      background: 'linear-gradient(to right,rgb(243, 240, 68),rgb(214, 158, 36))', // dark slate to navy
+      color: 'black', // light slate text
       borderRadius: '10px',
       padding: '14px 20px',
       fontWeight: '500',
@@ -135,6 +137,8 @@ function AppRoutes() {
       <Route path="/blog" element={<Blog />} />
       <Route path="/blog/:id" element={<BlogPost />} />
       <Route path="/category/:categoryName" element={<Categories />} />
+      <Route path="/faqs" element={<FAQs />} />
+      <Route path="/testimonials" element={<Testimonials />} />
       <Route path="checkout" element={<Checkout />} />
       <Route path="/thank-you" element={<ThankYouPage />} />
       <Route path="*" element={<NotFound />} />

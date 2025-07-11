@@ -301,7 +301,6 @@ import {
   Shirt,
   Sparkles,
   Baby,
-  Sofa,
   Box,
   BriefcaseBusiness,
   Footprints,
@@ -338,46 +337,49 @@ function Navbar() {
         className={`fixed w-full z-50 top-0 left-0 transition-shadow duration-300 ${
           scrolled ? "bg-white/90 backdrop-blur-md shadow-lg" : "bg-white"
         }`}
-        role="navigation"
-        aria-label="Main navigation"
       >
         <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
           {/* logo + mobile toggle */}
           <div className="flex items-center gap-5">
-            <button
+            {/* <button
               onClick={toggleSidebar}
               className="md:hidden text-blue-700 hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-600 rounded"
               aria-label="Open menu"
+            > */}
+            <button
+              onClick={toggleSidebar}
+              className="md:hidden text-yellow-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded"
             >
               <Menu size={26} />
             </button>
             <Link
               to="/"
-              className="flex items-center gap-2 md:gap-3 px-2 py-1 select-none focus:outline-none focus:ring-2 focus:ring-blue-600 rounded-lg group"
+              className="flex items-center gap-2 md:gap-3 px-2 py-1 select-none focus:outline-none focus:ring-2 focus:ring-black   rounded-lg group"
               aria-label="Homepage"
             >
               <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTon1Hk_Hhi4vMcBzAR-lp2JWeQDv_CiA7mdQ&s"
+                src="https://img.freepik.com/free-vector/realistic-black-suit-object-white-with-cotton-shirt-strict-elegant-tie-colored-as-jacket-isolated_1284-49101.jpg?uid=R144549760&ga=GA1.1.1838633775.1713893809&semt=ais_hybrid&w=740"
                 alt="PakFashion Logo"
-                className="w-10 h-10 rounded-full border-2 border-blue-800 object-cover shadow-md group-hover:scale-105 transition"
+                className="w-10 h-10 rounded-full border-2 border-yellow-500 object-cover shadow-md group-hover:scale-105 transition"
               />
-              <div className="flex items-center space-x-1 md:space-x-2 text-blue-700 font-semibold text-sm md:text-base">
+              {/* <div className="flex items-center space-x-1 md:space-x-2 text-blue-700 font-semibold text-sm md:text-base">
                 <span className="hidden sm:inline">||</span>
                 <span className="hidden sm:inline">-&gt;&gt;</span>
-              </div>
-              <span className="text-xl md:text-2xl font-extrabold text-blue-800 tracking-tight bg-blue-50 rounded-full px-3 py-1 shadow-sm">
-                PakFashion&nbsp;
+              </div> */}
+              <span className="text-xl md:text-2xl font-extrabold text-black tracking-tight bg-yellow-400 px-3 py-1 rounded-full shadow-sm">
+                PakFashions&nbsp;
                 <span className="hidden sm:inline">Nanyuki</span>
               </span>
-              <div className="flex items-center space-x-1 md:space-x-2 text-blue-700 font-semibold text-sm md:text-base">
-                <span className="hidden sm:inline">&lt;&lt;-</span>
-                <span className="hidden sm:inline">||</span>
-              </div>
+              {/* <span className="text-xl md:text-2xl font-extrabold text-blue-800 tracking-tight bg-blue-50 rounded-full px-3 py-1 shadow-sm">
+                PakFashion&nbsp;
+                <span className="hidden sm:inline">Nanyuki</span>
+              </span> */}
             </Link>
           </div>
 
           {/* ----------- DESKTOP NAV ----------- */}
-          <div className="hidden md:flex items-center space-x-8 font-semibold text-blue-700">
+          <div className="hidden md:flex items-center space-x-8 font-semibold text-black">
+            {/* <div className="hidden md:flex items-center space-x-8 font-semibold text-blue-700"> */}
             <NavLink to="/" label="Home" icon={<Home size={18} />} />
             <NavLink to="/shop" label="Shop" icon={<ShoppingBag size={18} />} />
 
@@ -388,7 +390,7 @@ function Navbar() {
             >
               <button
                 onClick={toggleDropdown}
-                className="flex items-center gap-1 hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-600 rounded transition"
+                className="flex items-center gap-1 hover:text-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded transition"
                 aria-haspopup="true"
                 aria-expanded={dropdownOpen}
                 aria-controls="categories-menu"
@@ -404,7 +406,8 @@ function Navbar() {
               <div
                 id="categories-menu"
                 role="menu"
-                className={`absolute bg-white shadow-lg border rounded-md w-64 mt-2 z-50 overflow-hidden
+                onClick={() => setDropdownOpen(false)}
+                className={`absolute bg-white shadow-lg border border-yellow-300 rounded-md w-64 mt-2 z-50 overflow-hidden
                   transition-all duration-300 ease-in-out origin-top
                   ${
                     dropdownOpen
@@ -414,40 +417,36 @@ function Navbar() {
                 `}
               >
                 <DropdownLink
-                  to="/category/mens-clothing"
+                  to="/category/Men's Clothing"
                   label="Men's Clothing"
                   icon={<Shirt size={16} />}
                 />
                 <DropdownLink
-                  to="/category/womens-clothing"
+                  to="/category/Women's Clothing"
                   label="Women's Clothing"
                   icon={<Sparkles size={16} />}
                 />
                 <DropdownLink
-                  to="/category/kids-clothing"
+                  to="/category/Kids' Clothing"
                   label="Kids' Clothing"
                   icon={<Baby size={16} />}
                 />
                 <DropdownLink
-                  to="/category/shoes"
+                  to="/category/Shoes"
                   label="Shoes"
                   icon={<Footprints size={16} />}
                 />
                 <DropdownLink
-                  to="/category/bags-accessories"
+                  to="/category/Bags & Accessories"
                   label="Bags & Accessories"
                   icon={<BriefcaseBusiness size={16} />}
                 />
-                {/* <DropdownLink
-                  to="/category/home-decor"
-                  label="Home Decor"
-                  icon={<Sofa size={16} />}
-                />
                 <DropdownLink
-                  to="/category/household-items"
-                  label="Household Items"
+                  to="/category/Clearance Sale"
+                  label="Clearance Sale"
                   icon={<Box size={16} />}
-                /> */}
+                />
+               
               </div>
             </div>
 
@@ -459,21 +458,20 @@ function Navbar() {
           <div className="flex items-center space-x-5">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="text-blue-700 hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-600 rounded transition"
+              className="text-yellow-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded transition"
               aria-label="Open search"
             >
               <Search size={22} />
             </button>
             <Link
               to="/cart"
-              className="relative text-blue-700 hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-600 rounded transition"
+              className="relative text-yellow-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded transition"
               aria-label="Shopping cart"
             >
               <ShoppingCart size={24} />
               {totalItems > 0 && (
                 <span
-                  className="absolute -top-1 -right-2 bg-red-600 text-white rounded-full text-xs font-bold px-2
-                  animate-pulse"
+                  className="absolute -top-1 -right-2 bg-black text-white rounded-full text-xs font-bold px-2 animate-pulse"
                   aria-live="polite"
                   aria-atomic="true"
                 >
@@ -487,26 +485,24 @@ function Navbar() {
 
       {/* ------------- MOBILE SIDEBAR ------------- */}
       <aside
-        className={`fixed top-0 left-0 h-full w-72 bg-blue-50 shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 h-full w-72 bg-yellow-100 shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         aria-label="Mobile menu"
         role="menu"
       >
-        <div className="flex justify-between items-center p-5 border-b border-blue-300">
-          <span className="text-xl font-bold text-blue-800 select-none">
-            Menu
-          </span>
+        <div className="flex justify-between items-center p-5 border-b border-yellow-300">
+          <span className="text-xl font-bold text-black select-none">Menu</span>
           <button
             onClick={closeSidebar}
-            className="text-blue-700 hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-600 rounded"
+            className="text-yellow-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded"
             aria-label="Close menu"
           >
             <X size={28} />
           </button>
         </div>
 
-        <nav className="flex flex-col p-6 space-y-5 text-blue-800 font-semibold">
+        <nav className="flex flex-col p-6 space-y-5 text-black font-semibold">
           <NavLinkMobile
             to="/"
             label="Home"
@@ -523,7 +519,7 @@ function Navbar() {
           {/* mobile categories toggle */}
           <button
             onClick={toggleDropdown}
-            className="flex items-center gap-2 text-blue-700 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-600 rounded"
+            className="flex items-center gap-2 text-black font-semibold focus:outline-none focus:ring-2 focus:ring-blue-600 rounded"
             aria-haspopup="true"
             aria-expanded={dropdownOpen}
           >
@@ -534,47 +530,41 @@ function Navbar() {
           {dropdownOpen && (
             <div className="ml-6 mt-2 flex flex-col space-y-3">
               <NavLinkMobile
-                to="/category/mens-clothing"
+                to="/category/Men's Clothing"
                 label="Men's Clothing"
                 icon={<Shirt size={18} />}
                 onClick={closeSidebar}
               />
               <NavLinkMobile
-                to="/category/womens-clothing"
+                to="/category/Women's Clothing"
                 label="Women's Clothing"
                 icon={<Sparkles size={18} />}
                 onClick={closeSidebar}
               />
               <NavLinkMobile
-                to="/category/kids-clothing"
+                to="/category/Kids' Clothing"
                 label="Kids' Clothing"
                 icon={<Baby size={18} />}
                 onClick={closeSidebar}
               />
               <NavLinkMobile
-                to="/category/shoes"
+                to="/category/Shoes"
                 label="Shoes"
                 icon={<Footprints size={18} />}
                 onClick={closeSidebar}
               />
               <NavLinkMobile
-                to="/category/bags-accessories"
+                to="/category/Bags & Accessories"
                 label="Bags & Accessories"
                 icon={<BriefcaseBusiness size={18} />}
                 onClick={closeSidebar}
               />
-              {/* <NavLinkMobile
-                to="/category/home-decor"
-                label="Home Decor"
-                icon={<Sofa size={18} />}
-                onClick={closeSidebar}
-              />
               <NavLinkMobile
-                to="/category/household-items"
-                label="Household Items"
+                to="/category/Clearance Sale"
+                label="Clearance Sale"
                 icon={<Box size={18} />}
                 onClick={closeSidebar}
-              /> */}
+              />
             </div>
           )}
 
@@ -607,12 +597,12 @@ function NavLink({ to, label, icon }) {
   return (
     <Link
       to={to}
-      className="flex items-center gap-1 text-blue-700 hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-600 rounded transition relative group"
+      className="flex items-center gap-1 text-yellow-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded transition relative group"
     >
       {icon}
       <span>{label}</span>
       <span
-        className="absolute bottom-[-4px] left-0 w-0 h-[2px] bg-blue-700 transition-all group-hover:w-full"
+        className="absolute bottom-[-4px] left-0 w-0 h-[2px] bg-yellow-500 transition-all group-hover:w-full"
         aria-hidden="true"
       />
     </Link>
@@ -624,7 +614,7 @@ function DropdownLink({ to, label, icon }) {
     <Link
       to={to}
       role="menuitem"
-      className="flex items-center gap-2 px-4 py-2 hover:bg-blue-100 focus:bg-blue-100 focus:outline-none transition"
+      className="flex items-center gap-2 px-4 py-2 hover:bg-yellow-100 focus:bg-yellow-100 focus:outline-none transition"
     >
       {icon}
       {label}
@@ -637,7 +627,7 @@ function NavLinkMobile({ to, label, icon, onClick }) {
     <Link
       to={to}
       onClick={onClick}
-      className="flex items-center gap-2 hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-600 rounded transition"
+      className="flex items-center gap-2 hover:text-black text-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded transition"
     >
       {icon}
       <span>{label}</span>

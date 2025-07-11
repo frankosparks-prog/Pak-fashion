@@ -138,7 +138,6 @@
 
 // export default Contact;
 
-
 import React, { useState, useEffect } from "react";
 import {
   FaEnvelope,
@@ -198,51 +197,53 @@ function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-blue-50 to-blue-100 text-blue-900 px-6 py-20 mt-12">
+    <div className="min-h-screen bg-white text-black px-6 py-20 mt-12">
       {/* Hero Section */}
       <div className="text-center mb-20" data-aos="fade-down">
-        <h1 className="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight bg-gradient-to-r from-blue-600 to-emerald-500 bg-clip-text text-transparent">
-          Contact Pak Fashion
+        <h1 className="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight">
+          Contact <span className="text-yellow-500">Pak Fashions</span>
         </h1>
-        <p className="text-lg md:text-xl max-w-3xl mx-auto text-blue-800 leading-relaxed">
+        <p className="text-lg md:text-xl max-w-3xl mx-auto text-gray-700 leading-relaxed">
           Questions? Feedback? We're always here to help with your sustainable fashion journey.
         </p>
-        <div className="w-20 h-1 bg-blue-500 mx-auto mt-6 rounded-full" />
+        <div className="w-20 h-1 bg-yellow-500 mx-auto mt-6 rounded-full" />
       </div>
 
-      {/* Info & Form */}
+      {/* Info & Form Section */}
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-start">
         {/* Info Cards */}
         <div className="space-y-10" data-aos="fade-right">
-          <h2 className="text-3xl font-semibold text-blue-800 border-l-4 border-blue-600 pl-4 mb-6">
+          <h2 className="text-3xl font-semibold border-l-4 border-yellow-500 pl-4 mb-6">
             Reach Out To Us
           </h2>
 
-          <div className="bg-white rounded-3xl shadow-xl p-6 flex items-start gap-6 hover:shadow-2xl transition duration-300">
-            <FaEnvelope className="text-4xl text-blue-600 mt-1" />
+          <div className="bg-yellow-50 rounded-3xl shadow-xl p-6 flex items-start gap-6 hover:shadow-2xl transition duration-300">
+            <FaEnvelope className="text-4xl text-yellow-500 mt-1" />
             <div>
               <h3 className="text-xl font-bold mb-1">Email</h3>
-              <a href="mailto:info@pakfashion.co.za" className="text-blue-700 hover:underline break-words">
+              <a href="mailto:info@pakfashion.co.za" className="text-gray-800 hover:underline break-words">
                 info@pakfashion.co.za
               </a>
             </div>
           </div>
 
-          <div className="bg-white rounded-3xl shadow-xl p-6 flex items-start gap-6 hover:shadow-2xl transition duration-300">
-            <FaPhoneAlt className="text-4xl text-blue-600 mt-1" />
+          <div className="bg-yellow-50 rounded-3xl shadow-xl p-6 flex items-start gap-6 hover:shadow-2xl transition duration-300">
+            <FaPhoneAlt className="text-4xl text-yellow-500 mt-1" />
             <div>
               <h3 className="text-xl font-bold mb-1">Phone</h3>
-              <a href="tel:+27112223333" className="text-blue-700 hover:underline">
+              <a href="tel:+27112223333" className="text-gray-800 hover:underline">
                 +27 11 222 3333
               </a>
             </div>
           </div>
 
-          <div className="bg-white rounded-3xl shadow-xl p-6 flex items-start gap-6 hover:shadow-2xl transition duration-300">
-            <FaMapMarkerAlt className="text-4xl text-blue-600 mt-1" />
+          <div className="bg-yellow-50 rounded-3xl shadow-xl p-6 flex items-start gap-6 hover:shadow-2xl transition duration-300">
+            <FaMapMarkerAlt className="text-4xl text-yellow-500 mt-1" />
             <div>
               <h3 className="text-xl font-bold mb-1">Visit Us</h3>
-              <p>pakfashion Clothes, Nyeri-Nanyuki Road, Nanyuki</p>
+              <p className="text-gray-800">
+                Pakfashion Clothes, Nyeri-Nanyuki Road, Nanyuki
+              </p>
             </div>
           </div>
         </div>
@@ -250,10 +251,10 @@ function Contact() {
         {/* Contact Form */}
         <form
           onSubmit={handleSubmit}
-          className="bg-white rounded-3xl shadow-xl p-10 space-y-6"
+          className="bg-yellow-50 rounded-3xl shadow-xl p-10 space-y-6"
           data-aos="fade-left"
         >
-          <h2 className="text-3xl font-semibold text-center text-blue-800 border-b border-blue-500 pb-4">
+          <h2 className="text-3xl font-semibold text-center border-b border-yellow-500 pb-4">
             Send Us a Message
           </h2>
 
@@ -263,7 +264,7 @@ function Contact() {
             value={formData.name}
             onChange={handleChange}
             placeholder="Your Name"
-            className="w-full p-4 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-4 border border-yellow-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
             required
           />
           <input
@@ -272,7 +273,7 @@ function Contact() {
             value={formData.email}
             onChange={handleChange}
             placeholder="Your Email"
-            className="w-full p-4 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-4 border border-yellow-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
             required
           />
           <input
@@ -281,21 +282,21 @@ function Contact() {
             value={formData.subject}
             onChange={handleChange}
             placeholder="Subject (optional)"
-            className="w-full p-4 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-4 border border-yellow-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
           />
           <textarea
             name="message"
             value={formData.message}
             onChange={handleChange}
             placeholder="Your Message"
-            className="w-full p-4 border border-blue-300 rounded-lg h-40 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-4 border border-yellow-300 rounded-lg h-40 resize-none focus:outline-none focus:ring-2 focus:ring-yellow-500"
             required
           />
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-700 hover:bg-blue-800 text-white py-4 rounded-full font-semibold tracking-wide transition duration-300"
+            className="w-full bg-yellow-500 hover:bg-yellow-600 text-black py-4 rounded-full font-semibold tracking-wide transition duration-300"
           >
             {loading ? "Sending..." : "Send Message"}
           </button>
@@ -304,7 +305,7 @@ function Contact() {
 
       {/* Google Map */}
       <section className="mt-28 max-w-6xl mx-auto" data-aos="fade-up">
-        <h2 className="text-3xl font-semibold text-center text-blue-800 mb-6">
+        <h2 className="text-3xl font-semibold text-center mb-6">
           Find Us on the Map
         </h2>
         <div className="w-full h-96 rounded-3xl shadow-2xl overflow-hidden">
@@ -321,22 +322,18 @@ function Contact() {
         </div>
       </section>
 
-      {/* WhatsApp Button */}
+      {/* WhatsApp Floating Button */}
       <a
         href="https://wa.me/27112223333?text=Hello!%20I%20have%20a%20question%20about%20pakfashion%20products."
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-8 right-8 bg-green-500 text-white p-5 rounded-full shadow-lg hover:bg-green-600 transition z-50"
+        className="fixed bottom-8 right-8 bg-green-500 text-white p-2 rounded-full shadow-lg hover:bg-green-600 transition z-50 animate-bounce"
         aria-label="Chat on WhatsApp"
       >
-        <FaWhatsapp className="text-4xl" />
+        <FaWhatsapp className="text-3xl" />
       </a>
     </div>
   );
 }
 
 export default Contact;
-
-
-
-{/* <iframe src="https://www.google.com/maps/embed?pb=!1m12!1m8!1m3!1d15959.273034144248!2d37.0698452!3d0.0100851!3m2!1i1024!2i768!4f13.1!2m1!1spak%20fashion%20nanyuki!5e0!3m2!1sen!2ske!4v1748244256144!5m2!1sen!2ske" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> */}
