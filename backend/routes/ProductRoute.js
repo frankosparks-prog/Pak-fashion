@@ -136,10 +136,14 @@ router.post("/like/:id", async (req, res) => {
       { $inc: { likes: 1 } },
       { new: true }
     );
-    if (!product) return res.status(404).json({ error: "Product not found" });
-    res.json(product);
+    if (!product) return res.status(404).json({ success: false, error: "Product not found" });
+
+    res.json({
+      success: true,
+      likes: product.likes,
+    });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 

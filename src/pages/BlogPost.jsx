@@ -1,72 +1,6 @@
-// import React from 'react';
-// import { Calendar, ArrowLeft } from 'lucide-react';
-// import { useNavigate } from 'react-router-dom';
-
-// function BlogPost() {
-//   const navigate = useNavigate();
-
-//   return (
-//     <div className="min-h-screen bg-white text-blue-900 mt-4">
-//       {/* Hero */}
-//       <div className="bg-blue-100 py-12 px-6 text-center">
-//         <h1 className="text-4xl font-bold mb-4">How Beadwork Became a Global Fashion Statement</h1>
-//         <div className="flex justify-center items-center text-sm text-blue-700">
-//           <Calendar className="w-4 h-4 mr-2" />
-//           May 1, 2025
-//         </div>
-//       </div>
-
-//       {/* Back Button */}
-//       <div className="max-w-4xl mx-auto px-4 mt-6">
-//         <button
-//           onClick={() => navigate(-1)}
-//           className="flex items-center text-sm text-blue-700 hover:underline mb-4"
-//         >
-//           <ArrowLeft className="w-4 h-4 mr-1" />
-//           Back to Blog
-//         </button>
-//       </div>
-
-//       {/* Blog Content */}
-//       <article className="max-w-4xl mx-auto px-4 pb-20 leading-relaxed text-lg text-blue-800">
-//         <p className="mb-6">
-//           Beadwork has transcended its origins as a form of cultural expression to become a
-//           prominent player in the world of fashion. From traditional Maasai bead necklaces in
-//           East Africa to contemporary haute couture pieces, beads are telling global stories.
-//         </p>
-
-//         <p className="mb-6">
-//           Fashion houses are now incorporating handcrafted beaded elements into runways, celebrating
-//           heritage while setting trends. Artisans behind the scenes are gaining visibility and fair
-//           trade movements have further supported their craft.
-//         </p>
-
-//         <p className="mb-6">
-//           As customers become more intentional about what they wear, beadwork offers an emotional
-//           and artistic connection—linking modern aesthetics with timeless tradition.
-//         </p>
-
-//         <p className="mb-6">
-//           Stay tuned as we continue to spotlight the makers, materials, and magic behind every stitch
-//           and string.
-//         </p>
-
-//         <hr className="my-10" />
-
-//         <p className="text-sm text-blue-600 italic">
-//           Written by Beadworks Team
-//         </p>
-//       </article>
-//     </div>
-//   );
-// }
-
-// export default BlogPost;
-
-// BlogPost.jsx
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Calendar, ArrowLeft } from "lucide-react";
+import { Calendar, ArrowLeft, MessageSquare } from "lucide-react";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
@@ -75,78 +9,242 @@ function BlogPost() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [blog, setBlog] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState({ name: "", text: "" });
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     fetch(`${SERVER_URL}/api/blogs/${id}`)
       .then((res) => res.json())
       .then((data) => setBlog(data))
       .catch((err) => console.error(err));
+
+    fetch(`${SERVER_URL}/api/blogs/${id}/comments`)
+      .then((res) => res.json())
+      .then((data) => setComments(data))
+      .catch((err) => console.error("Comments error:", err));
   }, [id]);
 
-  if (!blog)
-    return (
-      <div className="flex justify-center items-center py-20">
-        {" "}
-        <CircularProgress style={{ color: "black" }} />
-      </div>
-    );
-const formatDateWithSuffix = (dateStr) => {
-  const dateObj = new Date(dateStr);
+  const formatDateWithSuffix = (dateStr) => {
+    const dateObj = new Date(dateStr);
+    const day = dateObj.getDate();
+    const month = dateObj.toLocaleString("default", { month: "long" });
+    const year = dateObj.getFullYear();
+    const getSuffix = (d) => {
+      if (d > 3 && d < 21) return "th";
+      switch (d % 10) {
+        case 1: return "st";
+        case 2: return "nd";
+        case 3: return "rd";
+        default: return "th";
+      }
+    };
+    return `${day}${getSuffix(day)} ${month} ${year}`;
+  };
 
-  const day = dateObj.getDate();
-  const month = dateObj.toLocaleString("default", { month: "long" });
-  const year = dateObj.getFullYear();
+  const handleSubmitComment = async (e) => {
+    e.preventDefault();
+    if (!newComment.name || !newComment.text) return;
 
-  // Determine the ordinal suffix
-  const getSuffix = (d) => {
-    if (d > 3 && d < 21) return "th";
-    switch (d % 10) {
-      case 1: return "st";
-      case 2: return "nd";
-      case 3: return "rd";
-      default: return "th";
+    setSubmitting(true);
+    try {
+      const res = await fetch(`${SERVER_URL}/api/blogs/${id}/comments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newComment),
+      });
+      const savedComment = await res.json();
+      setComments((prev) => [savedComment, ...prev]);
+      setNewComment({ name: "", text: "" });
+    } catch (err) {
+      console.error("Failed to submit comment", err);
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  return `${day}${getSuffix(day)} ${month} ${year}`;
-};
+  if (!blog)
+    return (
+      <div className="flex justify-center items-center py-20 bg-white">
+        <CircularProgress style={{ color: "black" }} />
+      </div>
+    );
 
   return (
-    <div className="min-h-screen bg-white text-blue-900 mt-4">
-      <div className="bg-blue-100 py-12 px-6 text-center">
-        <h1 className="text-4xl font-bold mb-4">{blog.title}</h1>
-        <div className="flex justify-center items-center text-sm text-blue-700">
+    <div className="min-h-screen bg-white text-black mt-12">
+      {/* Header Section */}
+      <div className="bg-yellow-100 text-center py-16 px-6 shadow-sm">
+        <h1 className="text-4xl font-extrabold mb-4 max-w-3xl mx-auto leading-tight tracking-wide">
+          {blog.title}
+        </h1>
+        <div className="flex justify-center items-center text-sm text-black/70">
           <Calendar className="w-4 h-4 mr-2" />
-          {/* {blog.date} */}
           {formatDateWithSuffix(blog.date)}
         </div>
       </div>
 
+      {/* Back Navigation */}
       <div className="max-w-4xl mx-auto px-4 mt-6">
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center text-sm text-blue-700 hover:underline mb-4"
+          className="flex items-center text-sm text-yellow-600 hover:underline mb-4"
         >
           <ArrowLeft className="w-4 h-4 mr-1" />
           Back to Blog
         </button>
       </div>
 
-      <article className="max-w-4xl mx-auto px-4 pb-20 leading-relaxed text-lg text-blue-800">
+      {/* Blog Content */}
+      <article className="max-w-4xl mx-auto px-4 leading-relaxed text-lg text-black">
         {blog.content.split("\n").map((para, idx) => (
           <p className="mb-6" key={idx}>
             {para}
           </p>
         ))}
 
-        <hr className="my-10" />
+        <hr className="my-10 border-yellow-300" />
 
-        <p className="text-sm text-blue-600 italic">
-          Written by {blog.author}
+        <p className="text-sm italic text-yellow-600">
+          Written by <span className="font-medium text-black">{blog.author}</span>
         </p>
       </article>
+
+      {/* Comment Section */}
+      <section className="max-w-4xl mx-auto px-4 py-10 mt-10 bg-yellow-50 border-t border-yellow-300 rounded-lg">
+        <h2 className="text-2xl font-semibold text-yellow-800 flex items-center mb-4">
+          <MessageSquare className="w-5 h-5 mr-2" /> Comments
+        </h2>
+
+        <form onSubmit={handleSubmitComment} className="mb-8 space-y-4">
+          <input
+            type="text"
+            placeholder="Your name"
+            className="w-full px-4 py-2 border border-yellow-300 rounded focus:outline-none"
+            value={newComment.name}
+            onChange={(e) => setNewComment({ ...newComment, name: e.target.value })}
+          />
+          <textarea
+            rows={4}
+            placeholder="Write your comment..."
+            className="w-full px-4 py-2 border border-yellow-300 rounded focus:outline-none"
+            value={newComment.text}
+            onChange={(e) => setNewComment({ ...newComment, text: e.target.value })}
+          ></textarea>
+          <button
+            type="submit"
+            disabled={submitting}
+            className="bg-yellow-500 text-black px-6 py-2 rounded font-semibold hover:bg-yellow-600 transition"
+          >
+            {submitting ? "Posting..." : "Post Comment"}
+          </button>
+        </form>
+
+        {/* Display Comments */}
+        <div className="space-y-6">
+          {comments.length > 0 ? (
+            comments.map((comment, index) => (
+              <div key={index} className="border-l-4 border-yellow-400 pl-4">
+                <p className="text-sm text-gray-700 mb-1 font-medium">
+                  {comment.name}
+                </p>
+                <p className="text-gray-800">{comment.text}</p>
+              </div>
+            ))
+          ) : (
+            <p className="text-sm italic text-gray-500">No comments yet. Be the first to comment!</p>
+          )}
+        </div>
+      </section>
     </div>
   );
 }
 
 export default BlogPost;
+
+
+// import React, { useEffect, useState } from "react";
+// import { useParams, useNavigate } from "react-router-dom";
+// import { Calendar, ArrowLeft } from "lucide-react";
+// import CircularProgress from "@mui/material/CircularProgress";
+
+// const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+
+// function BlogPost() {
+//   const { id } = useParams();
+//   const navigate = useNavigate();
+//   const [blog, setBlog] = useState(null);
+
+//   useEffect(() => {
+//     fetch(`${SERVER_URL}/api/blogs/${id}`)
+//       .then((res) => res.json())
+//       .then((data) => setBlog(data))
+//       .catch((err) => console.error(err));
+//   }, [id]);
+
+//   if (!blog)
+//     return (
+//       <div className="flex justify-center items-center py-20 bg-white">
+//         <CircularProgress style={{ color: "black" }} />
+//       </div>
+//     );
+
+//   const formatDateWithSuffix = (dateStr) => {
+//     const dateObj = new Date(dateStr);
+//     const day = dateObj.getDate();
+//     const month = dateObj.toLocaleString("default", { month: "long" });
+//     const year = dateObj.getFullYear();
+//     const getSuffix = (d) => {
+//       if (d > 3 && d < 21) return "th";
+//       switch (d % 10) {
+//         case 1: return "st";
+//         case 2: return "nd";
+//         case 3: return "rd";
+//         default: return "th";
+//       }
+//     };
+//     return `${day}${getSuffix(day)} ${month} ${year}`;
+//   };
+
+//   return (
+//     <div className="min-h-screen bg-white text-black mt-12">
+//       {/* Header Section */}
+//       <div className="bg-yellow-100 text-center py-16 px-6 shadow-sm">
+//         <h1 className="text-4xl font-extrabold mb-4 max-w-3xl mx-auto leading-tight tracking-wide">
+//           {blog.title}
+//         </h1>
+//         <div className="flex justify-center items-center text-sm text-black/70">
+//           <Calendar className="w-4 h-4 mr-2" />
+//           {formatDateWithSuffix(blog.date)}
+//         </div>
+//       </div>
+
+//       {/* Back Navigation */}
+//       <div className="max-w-4xl mx-auto px-4 mt-6">
+//         <button
+//           onClick={() => navigate(-1)}
+//           className="flex items-center text-sm text-yellow-600 hover:underline mb-4"
+//         >
+//           <ArrowLeft className="w-4 h-4 mr-1" />
+//           Back to Blog
+//         </button>
+//       </div>
+
+//       {/* Content Area */}
+//       <article className="max-w-4xl mx-auto px-4 pb-20 leading-relaxed text-lg text-black">
+//         {blog.content.split("\n").map((para, idx) => (
+//           <p className="mb-6" key={idx}>
+//             {para}
+//           </p>
+//         ))}
+
+//         <hr className="my-10 border-yellow-300" />
+
+//         <p className="text-sm italic text-yellow-600">
+//           Written by <span className="font-medium text-black">{blog.author}</span>
+//         </p>
+//       </article>
+//     </div>
+//   );
+// }
+
+// export default BlogPost;

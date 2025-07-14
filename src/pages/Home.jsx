@@ -4,6 +4,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { ArrowRight } from "lucide-react";
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -70,9 +71,15 @@ function Home() {
         <section
           className="relative flex flex-col justify-center items-center text-center px-6 py-32 md:py-40 bg-cover bg-center bg-black text-white"
           style={{
-            backgroundImage: `linear-gradient(to bottom right, rgba(0, 0, 0, 0.7), rgba(0,0,0,0.7)), url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTon1Hk_Hhi4vMcBzAR-lp2JWeQDv_CiA7mdQ&s')`,
+            backgroundImage: `linear-gradient(to bottom right, rgba(0, 0, 0, 0.7), rgba(0,0,0,0.7)), url('./PakFashionslogo.jpg')`,
           }}
         >
+          {/* <section
+          className="relative flex flex-col justify-center items-center text-center px-6 py-32 md:py-40 bg-cover bg-center bg-black text-white"
+          style={{
+            backgroundImage: `linear-gradient(to bottom right, rgba(0, 0, 0, 0.7), rgba(0,0,0,0.7)), url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTon1Hk_Hhi4vMcBzAR-lp2JWeQDv_CiA7mdQ&s')`,
+          }}
+        > */}
           <h1
             className="text-5xl md:text-6xl font-extrabold drop-shadow"
             data-aos="fade-down"
@@ -169,7 +176,10 @@ function Home() {
             Get updates on latest styles, exclusive deals, and tips.
           </p>
 
-          <form className="flex flex-col sm:flex-row gap-4 justify-center mt-6" onSubmit={handleSubscribe} >
+          <form
+            className="flex flex-col sm:flex-row gap-4 justify-center mt-6"
+            onSubmit={handleSubscribe}
+          >
             <input
               type="email"
               placeholder="Enter your email"
@@ -203,8 +213,9 @@ function Home() {
                 data-aos-delay={index * 100}
               >
                 <img
-                  src={`https://picsum.photos/400/300?random=${blog + 30}`}
-                  alt={`Blog ${blog}`}
+                  // src=`${blog.image}`
+                  src={`https://picsum.photos/400/300?random=${index + 1}`}
+                  alt={`Blog ${blog.title}`}
                   className="rounded mb-4"
                 />
                 <h3 className="text-xl font-bold text-black mb-2">
@@ -215,7 +226,7 @@ function Home() {
                   to={`/blog/${blog._id}`}
                   className="text-yellow-500 font-medium hover:underline"
                 >
-                  Read More
+                  Read More →
                 </Link>
               </div>
             ))}
@@ -231,19 +242,18 @@ function Home() {
             #PakFashions
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 max-w-6xl mx-auto">
-             {instagram.map((item, index) => (
-            <img
-              key={item._id}
-              src={item.image}
-              alt="beaded"
-              className="w-full h-full object-cover hover:scale-110 transition-transform duration-300 rounded-lg"
-              data-aos="zoom-in"
-              data-aos-delay={index * 100}
-            />
-          ))}
+            {instagram.map((item, index) => (
+              <img
+                key={item._id}
+                src={item.image}
+                alt="beaded"
+                className="w-full h-full object-cover hover:scale-110 transition-transform duration-300 rounded-lg"
+                data-aos="zoom-in"
+                data-aos-delay={index * 100}
+              />
+            ))}
           </div>
         </section>
-
 
         {/* Testimonials */}
         <section className="bg-white py-20 px-6">
@@ -253,21 +263,31 @@ function Home() {
           >
             What Our Customers Say
           </h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {testimonials.slice(0, 3).map((testimonial, index) => (
-            <div
-              key={testimonial._id}
+            {testimonials.slice(0, 3).map((testimonial, index) => (
+              <div
+                key={testimonial._id}
                 className="bg-yellow-50 p-6 rounded shadow"
-              data-aos="fade-up"
-              data-aos-delay={index * 150}
-            >
-              <p className="italic text-gray-700 mb-3">"{testimonial.message}"</p>
-              <div className="font-semibold text-black">–{testimonial.name}</div>
-              <span className="text-gray-500 text-xs">Verified Buyer</span>
-            </div>
-          ))}
-        </div>
+                data-aos="fade-up"
+                data-aos-delay={index * 150}
+              >
+                <p className="italic text-gray-700 mb-3">
+                  "{testimonial.message}"
+                </p>
+                <div className="font-semibold text-black">
+                  –{testimonial.name}
+                </div>
+                <span className="text-gray-500 text-xs">Verified Buyer</span>
+              </div>
+            ))}
+          </div>
+          <Link
+            to={`/testimonials`}
+            className="text-yellow-500 font-medium hover:underline flex items-center justify-center mt-6"
+          >
+            Read More <ArrowRight className="ml-2" size={18} />
+          </Link>
         </section>
 
         {/* FAQ */}
@@ -279,22 +299,26 @@ function Home() {
             Frequently Asked Questions
           </h2>
           <div className="space-y-6">
-
             {faq.slice(0, 3).map((faq, index) => (
-            <div
-              key={faq._id}
-              className="p-5 border border-yellow-300 rounded-lg"
-              data-aos="fade-up"
-              data-aos-delay={index * 150}
-            >
-               <h3 className="text-lg font-bold text-yellow-600 mb-2">
+              <div
+                key={faq._id}
+                className="p-5 border border-yellow-300 rounded-lg"
+                data-aos="fade-up"
+                data-aos-delay={index * 150}
+              >
+                <h3 className="text-lg font-bold text-yellow-600 mb-2">
                   {faq.question}
                 </h3>
                 <p className="text-gray-800">{faq.answer}</p>
-            </div>
-          ))}
+              </div>
+            ))}
+            <Link
+              to={`/faqs`}
+              className="text-yellow-500 font-medium hover:underline flex items-center justify-end"
+            >
+              Read More <ArrowRight className="ml-2" size={18} />
+            </Link>
           </div>
-
         </section>
       </main>
     </>

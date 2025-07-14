@@ -66,7 +66,7 @@ function Testimonials() {
 
           {/* Show More / Show Less Button */}
           {testimonials.length > 9 && (
-            <div className="text-center mt-12">
+            <div className="text-center mt-2">
               <button
                 onClick={() => setShowAll(!showAll)}
                 className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-3 px-6 rounded-full shadow transition"

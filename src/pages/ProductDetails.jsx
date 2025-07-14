@@ -59,30 +59,25 @@ const ProductDetails = () => {
       );
       const data = await response.json();
       if (data.success) {
-        setLiked((prev) =>
-          prev.map((product) =>
-            product._id === productId
-              ? { ...product, likes: data.likes }
-              : product
-          )
-        );
+        // Update likes in product object
+        setProduct((prev) => ({ ...prev, likes: data.likes }));
+
+        // Show floating heart
         const newHeart = { id: Date.now(), productId };
         setFloatingHearts((prev) => [...prev, newHeart]);
+        console.log("Heart triggered for", productId);
 
-        // Remove after animation
+        // Remove heart after animation
         setTimeout(() => {
           setFloatingHearts((prev) => prev.filter((h) => h.id !== newHeart.id));
         }, 1200);
+
+        // Toggle liked state
+        setLiked(true); // Optional to prevent spamming
       }
     } catch (error) {
       console.error("Failed to like product:", error);
     }
-
-    // setLikedProducts((prev) =>
-    //   prev.includes(productId)
-    //     ? prev.filter((id) => id !== productId)
-    //     : [...prev, productId]
-    // );
   };
 
   if (loading) {
@@ -107,19 +102,19 @@ const ProductDetails = () => {
       <section className="bg-white text-black px-6 py-16 mt-12">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center bg-yellow-50 shadow-2xl rounded-3xl p-8 md:p-14">
           {/* Product Image */}
-          <div className="overflow-hidden rounded-xl shadow-xl">
+          <div className="relative overflow-hidden rounded-xl shadow-xl">
             {/* Floating hearts */}
             {floatingHearts
               .filter((h) => h.productId === product._id)
               .map((heart) => (
                 <div
                   key={heart.id}
-                  className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-pink-500 text-2xl pointer-events-none"
+                  className="absolute left-1/2 top-80 transform -translate-x-1/2 -translate-y-1/2 text-pink-500 text-6xl pointer-events-none "
                   style={{
                     animation: "floatHeart 1.2s ease-out forwards",
                   }}
                 >
-                  ❤️❤️
+                  ❤️
                 </div>
               ))}
             <img
@@ -179,7 +174,7 @@ const ProductDetails = () => {
               <button
                 onClick={() => toggleLike(product._id)}
                 title={liked ? "Unlike" : "Like"}
-                className={`rounded-full p-3 h-14 w-14 text-lg border-2 transition-all duration-300 flex justify-center items-center ${
+                className={`rounded-full p-3 h-14 w-14 text-lg border-2 transition-all duration-300 flex justify-center items-center hover:bg-red-100 hover:border-red-500 hover:text-red-500 hover:animate-pulse ${
                   liked
                     ? "bg-red-100 border-red-500 text-red-500 animate-pulse"
                     : "bg-white border-gray-400 text-gray-700 hover:bg-gray-100"
@@ -221,7 +216,9 @@ const ProductDetails = () => {
             <CircularProgress style={{ color: "#D97706" }} />
           </div>
         ) : relatedProducts.length === 0 ? (
-          <p className="text-gray-500">No related products found.</p>
+          <p className="text-gray-500 text-center font-medium">
+            No related products found.
+          </p>
         ) : (
           <div className="flex overflow-x-auto space-x-6 pb-4 scrollbar-thin scrollbar-thumb-blue-500">
             {relatedProducts.map((p) => (

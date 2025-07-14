@@ -311,7 +311,6 @@ import { useCart } from "../context/CartContext";
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false); // mobile sidebar
   const [dropdownOpen, setDropdownOpen] = useState(false); // categories dropdown
-  // const [searchOpen, setSearchOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { cartItems } = useCart();
@@ -358,10 +357,11 @@ function Navbar() {
               aria-label="Homepage"
             >
               <img
-                src="https://img.freepik.com/free-vector/realistic-black-suit-object-white-with-cotton-shirt-strict-elegant-tie-colored-as-jacket-isolated_1284-49101.jpg?uid=R144549760&ga=GA1.1.1838633775.1713893809&semt=ais_hybrid&w=740"
+                src="./PakFashions-logo.jpg"
                 alt="PakFashion Logo"
                 className="w-10 h-10 rounded-full border-2 border-yellow-500 object-cover shadow-md group-hover:scale-105 transition"
               />
+              
               {/* <div className="flex items-center space-x-1 md:space-x-2 text-blue-700 font-semibold text-sm md:text-base">
                 <span className="hidden sm:inline">||</span>
                 <span className="hidden sm:inline">-&gt;&gt;</span>

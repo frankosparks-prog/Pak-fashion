@@ -81,6 +81,8 @@ function Shop() {
   );
 
   const toggleLike = async (productId) => {
+    console.log("🔁 toggleLike called for product:", productId);
+
     try {
       const response = await fetch(
         `${SERVER_URL}/api/products/like/${productId}`,
@@ -88,32 +90,48 @@ function Shop() {
           method: "POST",
         }
       );
-      const data = await response.json();
-      if (data.success) {
-        setLikedProducts((prev) =>
-          prev.map((product) =>
-            product._id === productId
-              ? { ...product, likes: data.likes }
-              : product
-          )
-        );
-        const newHeart = { id: Date.now(), productId };
-        setFloatingHearts((prev) => [...prev, newHeart]);
 
-        // Remove after animation
-        setTimeout(() => {
-          setFloatingHearts((prev) => prev.filter((h) => h.id !== newHeart.id));
-        }, 1200);
+      console.log("📡 Server response status:", response.status);
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("📥 Server response data:", data);
+
+        if (data.success) {
+          const newHeart = { id: Date.now(), productId };
+
+          // Update product likes in state
+          setProducts((prev) =>
+            prev.map((product) =>
+              product._id === productId
+                ? { ...product, likes: data.likes }
+                : product
+            )
+          );
+
+          // Trigger heart animation
+          setFloatingHearts((prev) => [...prev, newHeart]);
+
+          // Track liked products
+          setLikedProducts((prev) =>
+            prev.includes(productId) ? prev : [...prev, productId]
+          );
+
+          // Remove floating heart after animation
+          setTimeout(() => {
+            setFloatingHearts((prev) =>
+              prev.filter((h) => h.id !== newHeart.id)
+            );
+          }, 1200);
+        } else {
+          console.warn("❗ Like action was not successful:", data);
+        }
+      } else {
+        console.error("❌ Server responded with error:", response.statusText);
       }
     } catch (error) {
-      console.error("Failed to like product:", error);
+      console.error("❗ Failed to like product:", error);
     }
-
-    // setLikedProducts((prev) =>
-    //   prev.includes(productId)
-    //     ? prev.filter((id) => id !== productId)
-    //     : [...prev, productId]
-    // );
   };
 
   const categories = [
@@ -290,17 +308,22 @@ function Shop() {
                       .map((heart) => (
                         <div
                           key={heart.id}
-                          className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-pink-500 text-2xl pointer-events-none"
+                          className="absolute left-1/2 top-80 transform -translate-x-1/2 -translate-y-1/2 text-pink-500 text-3xl pointer-events-none z-10"
                           style={{
                             animation: "floatHeart 1.2s ease-out forwards",
                           }}
+                          // style={{
+                          //   animation: likedProducts.includes(product._id)
+                          //     ? "pop 0.3s ease-in-out"
+                          //     : "none",
+                          // }}
                         >
                           ❤️❤️
                         </div>
                       ))}
                     <Link to={`/product/${product._id}`}>
                       <img
-                        src={product._image}
+                        src={product.image}
                         alt={product.name}
                         className="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-300"
                       />
@@ -324,20 +347,20 @@ function Shop() {
                         Ksh {product.price.toLocaleString()}
                       </p>
                     </div>
-                    <div className="mt-4 flex justify-between items-center">
+                    <div className="mt-4 flex justify-between items-center gap-4">
                       <button
                         onClick={() => toggleLike(product._id)}
-                        className={`p-2 rounded-full ${
+                        className={`p-2 rounded-full hover:bg-yellow-200 hover:text-red-600 ${
                           likedProducts.includes(product._id)
-                            ? "bg-yellow-200 text-red-600 animate-pulse"
-                            : "text-yellow-500 hover:bg-yellow-100"
+                            ? "text-red-600 bg-yellow-100"
+                            : "text-yellow-500"
                         }`}
                       >
                         <FaHeart size={20} />
                       </button>
                       <button
                         onClick={() => addToCart(product)}
-                        className="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-full font-semibold flex items-center gap-2"
+                        className="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-full font-semibold flex items-center gap-2 w-full justify-center transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <FaCartPlus /> Add to Cart
                       </button>
