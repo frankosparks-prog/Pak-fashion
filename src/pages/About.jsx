@@ -17,7 +17,7 @@ function About() {
           About <span className="text-yellow-500">Pak Fashions</span>
         </h1>
         <p className="text-lg md:text-xl max-w-3xl mx-auto text-gray-700 leading-relaxed">
-          Quality pre-loved fashion with a purpose — making style affordable, sustainable, and community-driven.
+          Quality loved fashion with a purpose — making style affordable, sustainable, and community-driven.
         </p>
         <div className="w-20 h-1 bg-yellow-500 mx-auto mt-6 rounded-full" />
       </div>
@@ -35,8 +35,8 @@ function About() {
             <span className="border-l-4 border-yellow-500 pl-4">Our Story & Mission</span>
           </h2>
           <p className="text-gray-800 leading-relaxed text-lg mb-4">
-            Founded in 2018, Pak Fashion is dedicated to providing high-quality, affordable second-hand clothing to our community.
-            We believe in extending the life of fashion while promoting sustainability and reducing waste.
+            Founded in 2010, Pak Fashion is dedicated to providing high-quality, affordable clothing to our community.
+            We believe in extending the life of fashion while promoting sustainability and beauty.
           </p>
           <p className="text-gray-800 leading-relaxed text-lg">
             Our carefully curated collection supports eco-friendly shopping habits and helps customers find unique styles
@@ -55,7 +55,7 @@ function About() {
             {
               icon: <FaRecycle className="text-5xl text-yellow-500 mb-5 mx-auto" />,
               title: "Sustainability",
-              desc: "Giving clothes a second life to reduce fashion waste and protect the environment.",
+              desc: "Giving the community a chance to be as beautiful as can be fostering love among each other.",
             },
             {
               icon: <FaUsers className="text-5xl text-yellow-500 mb-5 mx-auto" />,

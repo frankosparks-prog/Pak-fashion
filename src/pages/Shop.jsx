@@ -11,6 +11,7 @@ import "aos/dist/aos.css";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import CircularProgress from "@mui/material/CircularProgress";
+import { Helmet } from "react-helmet-async";
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -160,253 +161,294 @@ function Shop() {
   };
 
   return (
-    <div className="bg-white min-h-screen px-6 py-12 sm:px-12 lg:px-20 mt-12 font-sans text-black">
-      {/* Hero */}
-      <header className="text-center mb-12" data-aos="fade-down">
-        <h1 className="text-5xl font-extrabold tracking-tight mb-3 text-black">
-          Shop Our Collection
-        </h1>
-        <p className="text-yellow-700 font-medium text-lg">
-          Discover stylish pieces made with love and tradition.
-        </p>
-        <div className="h-1 w-28 bg-yellow-500 rounded-full mx-auto mt-4"></div>
-      </header>
+    <>
+      <Helmet>
+        <title>Shop Stylish Clothing Online | Pak Fashions Kenya</title>
+        <meta
+          name="description"
+          content="Browse and shop elegant men's, women's and kids' clothing, shoes, bags and accessories at unbeatable prices. Fast delivery in Kenya."
+        />
+        <meta
+          name="keywords"
+          content="shop clothes Kenya, affordable fashion, men's wear, women's dresses, Nanyuki, kids wear, bags, accessories"
+        />
+        <meta name="robots" content="index, follow" />
 
-      <div className="flex flex-col md:flex-row gap-10">
-        {/* Filters Sidebar */}
-        <aside className="md:w-1/4 w-full bg-yellow-50 p-8 rounded-2xl shadow border border-yellow-200 md:sticky top-24 self-start text-black">
-          <div className="space-y-10">
-            {/* Search */}
-            <div>
-              <h2 className="text-2xl font-semibold mb-5">Search Products</h2>
-              <div className="relative">
-                <FaSearch className="absolute left-4 top-3.5 text-yellow-600" />
+        {/* Open Graph */}
+        <meta property="og:title" content="Shop Online | Pak Fashions" />
+        <meta
+          property="og:description"
+          content="Discover Pak Fashions collection of trendy, quality, and affordable clothing. Fast local delivery."
+        />
+        <meta
+          property="og:image"
+          content="https://pakfashions.co.ke/PakFashions-logo.jpg"
+        />
+        <meta property="og:url" content="https://pakfashions.co.ke/shop" />
+        <meta property="og:type" content="website" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Pak Fashions | Online Shop" />
+        <meta
+          name="twitter:description"
+          content="Affordable and elegant fashion for all. Based in Nanyuki, Laikipia."
+        />
+        <meta
+          name="twitter:image"
+          content="https://pakfashions.co.ke/PakFashions-logo.jpg"
+        />
+      </Helmet>
+      <div className="bg-white min-h-screen px-6 py-12 sm:px-12 lg:px-20 mt-12 font-sans text-black">
+        {/* Hero */}
+        <header className="text-center mb-12" data-aos="fade-down">
+          <h1 className="text-5xl font-extrabold tracking-tight mb-3 text-black">
+            Shop Our Collection
+          </h1>
+          <p className="text-yellow-700 font-medium text-lg">
+            Discover stylish pieces made with love and tradition.
+          </p>
+          <div className="h-1 w-28 bg-yellow-500 rounded-full mx-auto mt-4"></div>
+        </header>
+
+        <div className="flex flex-col md:flex-row gap-10">
+          {/* Filters Sidebar */}
+          <aside className="md:w-1/4 w-full bg-yellow-50 p-8 rounded-2xl shadow border border-yellow-200 md:sticky top-24 self-start text-black">
+            <div className="space-y-10">
+              {/* Search */}
+              <div>
+                <h2 className="text-2xl font-semibold mb-5">Search Products</h2>
+                <div className="relative">
+                  <FaSearch className="absolute left-4 top-3.5 text-yellow-600" />
+                  <input
+                    type="text"
+                    placeholder="Search products..."
+                    className="w-full pl-12 pr-4 py-3 border border-yellow-300 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-500 transition"
+                    value={searchTerm}
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value);
+                      setCurrentPage(1);
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Categories */}
+              <div>
+                <h3 className="text-xl font-semibold mb-5">Categories</h3>
+                <div className="flex flex-col space-y-4 max-h-52 overflow-auto pr-2">
+                  {categories.map((cat) => (
+                    <label
+                      key={cat}
+                      className="inline-flex items-center space-x-3 text-black cursor-pointer"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedCategories.includes(cat)}
+                        onChange={() => handleCategoryChange(cat)}
+                        className="form-checkbox h-5 w-5 text-yellow-600"
+                      />
+                      <span className="text-lg">{cat}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Max Price */}
+              <div>
+                <h3 className="text-xl font-semibold mb-4">
+                  Max Price:{" "}
+                  <span className="text-yellow-600 font-bold">
+                    Ksh {maxPrice}
+                  </span>
+                </h3>
                 <input
-                  type="text"
-                  placeholder="Search products..."
-                  className="w-full pl-12 pr-4 py-3 border border-yellow-300 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-500 transition"
-                  value={searchTerm}
+                  type="range"
+                  min="100"
+                  max="5000"
+                  value={maxPrice}
                   onChange={(e) => {
-                    setSearchTerm(e.target.value);
+                    setMaxPrice(e.target.value);
                     setCurrentPage(1);
                   }}
+                  className="w-full accent-yellow-600"
                 />
               </div>
-            </div>
 
-            {/* Categories */}
-            <div>
-              <h3 className="text-xl font-semibold mb-5">Categories</h3>
-              <div className="flex flex-col space-y-4 max-h-52 overflow-auto pr-2">
-                {categories.map((cat) => (
-                  <label
-                    key={cat}
-                    className="inline-flex items-center space-x-3 text-black cursor-pointer"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selectedCategories.includes(cat)}
-                      onChange={() => handleCategoryChange(cat)}
-                      className="form-checkbox h-5 w-5 text-yellow-600"
-                    />
-                    <span className="text-lg">{cat}</span>
-                  </label>
-                ))}
+              {/* Tags */}
+              <div>
+                <h3 className="text-xl font-semibold mb-5">Popular Tags</h3>
+                <div className="flex flex-wrap gap-3">
+                  {tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="bg-yellow-100 text-yellow-700 px-4 py-1 rounded-full text-sm font-medium"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
+          </aside>
 
-            {/* Max Price */}
-            <div>
-              <h3 className="text-xl font-semibold mb-4">
-                Max Price:{" "}
-                <span className="text-yellow-600 font-bold">
-                  Ksh {maxPrice}
-                </span>
-              </h3>
-              <input
-                type="range"
-                min="100"
-                max="5000"
-                value={maxPrice}
-                onChange={(e) => {
-                  setMaxPrice(e.target.value);
-                  setCurrentPage(1);
-                }}
-                className="w-full accent-yellow-600"
-              />
-            </div>
-
-            {/* Tags */}
-            <div>
-              <h3 className="text-xl font-semibold mb-5">Popular Tags</h3>
-              <div className="flex flex-wrap gap-3">
-                {tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="bg-yellow-100 text-yellow-700 px-4 py-1 rounded-full text-sm font-medium"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </aside>
-
-        {/* Main Content */}
-        <main className="flex-1 flex flex-col">
-          {/* Sort */}
-          <div
-            className="flex justify-between items-center mb-8"
-            data-aos="fade-left"
-          >
-            <div className="text-lg font-semibold">
-              {filteredProducts.length} Products Found
-            </div>
-            <select
-              className="border border-yellow-400 p-3 rounded-md text-black focus:ring-2 focus:ring-yellow-500"
-              value={sortOption}
-              onChange={(e) => setSortOption(e.target.value)}
-            >
-              <option value="">Sort By</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-              <option value="newest">Newest Arrivals</option>
-              <option value="rated">Best Rated</option>
-            </select>
-          </div>
-
-          {/* Product Grid */}
-          {loading ? (
-            <div className="flex justify-center items-center py-20">
-              <CircularProgress style={{ color: "black" }} />{" "}
-            </div>
-          ) : error ? (
-            <p className="text-center text-red-600 bg-red-100 border border-red-300 px-4 py-2 rounded-md w-fit mx-auto font-semibold mb-6">
-              {error}
-            </p>
-          ) : (
+          {/* Main Content */}
+          <main className="flex-1 flex flex-col">
+            {/* Sort */}
             <div
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10"
+              className="flex justify-between items-center mb-8"
+              data-aos="fade-left"
+            >
+              <div className="text-lg font-semibold">
+                {filteredProducts.length} Products Found
+              </div>
+              <select
+                className="border border-yellow-400 p-3 rounded-md text-black focus:ring-2 focus:ring-yellow-500"
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value)}
+              >
+                <option value="">Sort By</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="newest">Newest Arrivals</option>
+                <option value="rated">Best Rated</option>
+              </select>
+            </div>
+
+            {/* Product Grid */}
+            {loading ? (
+              <div className="flex justify-center items-center py-20">
+                <CircularProgress style={{ color: "black" }} />{" "}
+              </div>
+            ) : error ? (
+              <p className="text-center text-red-600 bg-red-100 border border-red-300 px-4 py-2 rounded-md w-fit mx-auto font-semibold mb-6">
+                {error}
+              </p>
+            ) : (
+              <div
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10"
+                data-aos="fade-up"
+              >
+                {paginatedProducts.length === 0 && (
+                  <p className="text-center text-yellow-600 col-span-full">
+                    No products match your filters.
+                  </p>
+                )}
+                {paginatedProducts.map((product) => (
+                  <article
+                    key={product._id}
+                    className="bg-white border border-yellow-100 rounded-2xl shadow-lg hover:shadow-2xl transition overflow-hidden group cursor-pointer"
+                    data-aos="zoom-in"
+                  >
+                    <div className="relative">
+                      {/* Floating hearts */}
+                      {floatingHearts
+                        .filter((h) => h.productId === product._id)
+                        .map((heart) => (
+                          <div
+                            key={heart.id}
+                            className="absolute left-1/2 top-80 transform -translate-x-1/2 -translate-y-1/2 text-pink-500 text-3xl pointer-events-none z-10"
+                            style={{
+                              animation: "floatHeart 1.2s ease-out forwards",
+                            }}
+                            // style={{
+                            //   animation: likedProducts.includes(product._id)
+                            //     ? "pop 0.3s ease-in-out"
+                            //     : "none",
+                            // }}
+                          >
+                            ❤️❤️
+                          </div>
+                        ))}
+                      <Link to={`/product/${product._id}`}>
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </Link>
+                      <span className="absolute top-3 left-3 bg-yellow-600 text-white text-xs px-3 py-1 rounded-full shadow font-medium">
+                        {product.tag}
+                      </span>
+                    </div>
+                    <div className="p-5 flex flex-col justify-between h-56">
+                      <div>
+                        <h3 className="font-semibold text-xl mb-2 truncate">
+                          {product.name}
+                        </h3>
+                        <div className="flex items-center space-x-2 mb-2">
+                          {renderStars(product.rating)}
+                          <span className="text-sm text-yellow-600 font-medium">
+                            ({product.rating})
+                          </span>
+                        </div>
+                        <p className="text-lg font-bold text-black">
+                          Ksh {product.price.toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="mt-4 flex justify-between items-center gap-4">
+                        <button
+                          onClick={() => toggleLike(product._id)}
+                          className={`p-2 rounded-full hover:bg-yellow-200 hover:text-red-600 ${
+                            likedProducts.includes(product._id)
+                              ? "text-red-600 bg-yellow-100"
+                              : "text-yellow-500"
+                          }`}
+                        >
+                          <FaHeart size={20} />
+                        </button>
+                        <button
+                          onClick={() => addToCart(product)}
+                          className="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-full font-semibold flex items-center gap-2 w-full justify-center transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          <FaCartPlus /> Add to Cart
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
+            {/* Pagination */}
+            <nav
+              className="mt-12 flex justify-center items-center space-x-3"
+              aria-label="Pagination"
               data-aos="fade-up"
             >
-              {paginatedProducts.length === 0 && (
-                <p className="text-center text-yellow-600 col-span-full">
-                  No products match your filters.
-                </p>
-              )}
-              {paginatedProducts.map((product) => (
-                <article
-                  key={product._id}
-                  className="bg-white border border-yellow-100 rounded-2xl shadow-lg hover:shadow-2xl transition overflow-hidden group cursor-pointer"
-                  data-aos="zoom-in"
-                >
-                  <div className="relative">
-                    {/* Floating hearts */}
-                    {floatingHearts
-                      .filter((h) => h.productId === product._id)
-                      .map((heart) => (
-                        <div
-                          key={heart.id}
-                          className="absolute left-1/2 top-80 transform -translate-x-1/2 -translate-y-1/2 text-pink-500 text-3xl pointer-events-none z-10"
-                          style={{
-                            animation: "floatHeart 1.2s ease-out forwards",
-                          }}
-                          // style={{
-                          //   animation: likedProducts.includes(product._id)
-                          //     ? "pop 0.3s ease-in-out"
-                          //     : "none",
-                          // }}
-                        >
-                          ❤️❤️
-                        </div>
-                      ))}
-                    <Link to={`/product/${product._id}`}>
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </Link>
-                    <span className="absolute top-3 left-3 bg-yellow-600 text-white text-xs px-3 py-1 rounded-full shadow font-medium">
-                      {product.tag}
-                    </span>
-                  </div>
-                  <div className="p-5 flex flex-col justify-between h-56">
-                    <div>
-                      <h3 className="font-semibold text-xl mb-2 truncate">
-                        {product.name}
-                      </h3>
-                      <div className="flex items-center space-x-2 mb-2">
-                        {renderStars(product.rating)}
-                        <span className="text-sm text-yellow-600 font-medium">
-                          ({product.rating})
-                        </span>
-                      </div>
-                      <p className="text-lg font-bold text-black">
-                        Ksh {product.price.toLocaleString()}
-                      </p>
-                    </div>
-                    <div className="mt-4 flex justify-between items-center gap-4">
-                      <button
-                        onClick={() => toggleLike(product._id)}
-                        className={`p-2 rounded-full hover:bg-yellow-200 hover:text-red-600 ${
-                          likedProducts.includes(product._id)
-                            ? "text-red-600 bg-yellow-100"
-                            : "text-yellow-500"
-                        }`}
-                      >
-                        <FaHeart size={20} />
-                      </button>
-                      <button
-                        onClick={() => addToCart(product)}
-                        className="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-full font-semibold flex items-center gap-2 w-full justify-center transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <FaCartPlus /> Add to Cart
-                      </button>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-          )}
-          {/* Pagination */}
-          <nav
-            className="mt-12 flex justify-center items-center space-x-3"
-            aria-label="Pagination"
-            data-aos="fade-up"
-          >
-            <button
-              onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-              disabled={currentPage === 1}
-              className="px-4 py-2 rounded-full border border-yellow-500 text-yellow-600 disabled:text-yellow-300 disabled:border-yellow-200 hover:bg-yellow-100"
-            >
-              &lt;
-            </button>
-            {[...Array(totalPages).keys()].map((page) => (
               <button
-                key={page + 1}
-                onClick={() => setCurrentPage(page + 1)}
-                className={`px-4 py-2 rounded-full border text-yellow-600 border-yellow-500 hover:bg-yellow-200 ${
-                  currentPage === page + 1
-                    ? "bg-yellow-600 text-white font-semibold"
-                    : "bg-white"
-                }`}
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 rounded-full border border-yellow-500 text-yellow-600 disabled:text-yellow-300 disabled:border-yellow-200 hover:bg-yellow-100"
               >
-                {page + 1}
+                &lt;
               </button>
-            ))}
-            <button
-              onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-              disabled={currentPage === totalPages}
-              className="px-4 py-2 rounded-full border border-yellow-500 text-yellow-600 disabled:text-yellow-300 disabled:border-yellow-200 hover:bg-yellow-100"
-            >
-              &gt;
-            </button>
-          </nav>
-        </main>
+              {[...Array(totalPages).keys()].map((page) => (
+                <button
+                  key={page + 1}
+                  onClick={() => setCurrentPage(page + 1)}
+                  className={`px-4 py-2 rounded-full border text-yellow-600 border-yellow-500 hover:bg-yellow-200 ${
+                    currentPage === page + 1
+                      ? "bg-yellow-600 text-white font-semibold"
+                      : "bg-white"
+                  }`}
+                >
+                  {page + 1}
+                </button>
+              ))}
+              <button
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(p + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 rounded-full border border-yellow-500 text-yellow-600 disabled:text-yellow-300 disabled:border-yellow-200 hover:bg-yellow-100"
+              >
+                &gt;
+              </button>
+            </nav>
+          </main>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

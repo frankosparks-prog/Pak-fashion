@@ -8,7 +8,7 @@ const parser = require("../middleware/cloudinaryUpload");
 router.get('/', async (req, res) => {
   try {
     const { limit } = req.query;
-    const blogs = await BlogPost.find({}, 'title date description author')
+    const blogs = await BlogPost.find({}, 'title date description author image')
       .limit(limit ? parseInt(limit) : 0);  // Apply limit if provided
     res.json(blogs);
   } catch (err) {
@@ -16,6 +16,17 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET /api/comments (fetch all with blog info)
+router.get('/comments', async (req, res) => {
+  try {
+    const comments = await Comment.find()
+      .populate('blogId', 'title') // only fetch blog title
+      .sort({ createdAt: -1 });
+    res.json(comments);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 // GET single blog post by ID
 router.get('/:id', async (req, res) => {
@@ -93,6 +104,7 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
 // GET /api/blogs/:id/comments
 router.get('/:id/comments', async (req, res) => {
   const comments = await Comment.find({ blogId: req.params.id }).sort({ createdAt: -1 });
@@ -108,6 +120,17 @@ router.post('/:id/comments', async (req, res) => {
   });
   await newComment.save();
   res.json(newComment);
+});
+
+// DELETE /api/comments/:id
+router.delete('/comments/:id', async (req, res) => {
+  try {
+    const deleted = await Comment.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ message: 'Comment not found' });
+    res.json({ message: 'Comment deleted' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 module.exports = router;

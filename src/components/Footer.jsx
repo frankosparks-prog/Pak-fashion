@@ -195,7 +195,7 @@ function Footer() {
           <li><strong>Free delivery within Nanyuki town</strong> and surrounding areas.</li>
           <li>Orders outside Nanyuki are delivered within 2–5 business days via trusted courier services.</li>
           <li>Tracking information is shared via email or SMS once your order is dispatched.</li>
-          <li>Shipping is free for orders above <strong>Ksh 5,000</strong> nationwide.</li>
+          <li>Shipping is free for orders above <strong>Ksh 10,000</strong> nationwide.</li>
           <li>Same-day delivery may be available within Nanyuki for orders placed before 1 PM.</li>
         </ul>
         <p className="mt-3">

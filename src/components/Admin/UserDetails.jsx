@@ -129,7 +129,7 @@ const UsersDetails = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <CircularProgress size={40} sx={{ color: "#D97706" }} />
+        <CircularProgress size={40} sx={{ color: "black" }} />
       </div>
     );
   }

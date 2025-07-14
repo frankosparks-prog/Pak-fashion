@@ -5,6 +5,8 @@ import {
   MailCheck,
   BookOpenText,
   MessageCircle,
+  MessageCircleDashed,
+  MessageSquareMore,
   Package,
   CreditCard,
   LogOut,
@@ -27,17 +29,21 @@ const AdminDashboard = () => {
       {/* ──────────────────  Sidebar  ────────────────── */}
       <aside
         className={`bg-gray-800 border-r border-gray-700 fixed md:relative z-20 top-0 h-full w-64 p-5 transition-transform duration-300
-        ${isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
+        ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        }`}
       >
         {/* Logo + Close (mobile) */}
         <div className="flex items-center justify-between mb-10 mt-6 md:mt-0">
           <div className="flex items-center gap-3">
             <img
-              src="https://img.freepik.com/free-photo/colorful-bracelets-dark-background-beads-bracelets-dark-background_1057-32146.jpg?t=st=1746705620~exp=1746709220~hmac=4aad0a957a0970ede8922b4ac3ca35825d00497c423dd869284ea39de2df30ec&w=1380"
-              alt="Beadworks logo"
+              src="./PakFashions-logo.jpg"
+              alt="Pak Fashions logo"
               className="w-9 h-9 rounded-full border-2 border-amber-500 object-cover"
             />
-            <h2 className="text-2xl font-extrabold text-amber-400">Beadworks</h2>
+            <h2 className="text-2xl font-extrabold text-amber-400">
+              Pak Fashions
+            </h2>
           </div>
 
           {/* Close btn (mobile) */}
@@ -107,7 +113,32 @@ const AdminDashboard = () => {
                 Testimonials
               </NavLink>
             </li>
-
+            <li>
+              <NavLink
+                to="comments"
+                className={({ isActive }) =>
+                  `flex items-center gap-3 text-lg font-medium transition-colors duration-200 ${
+                    isActive ? "text-amber-400" : "hover:text-amber-400"
+                  }`
+                }
+              >
+                <MessageSquareMore className="w-5 h-5" />
+                Comments
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="faqs"
+                className={({ isActive }) =>
+                  `flex items-center gap-3 text-lg font-medium transition-colors duration-200 ${
+                    isActive ? "text-amber-400" : "hover:text-amber-400"
+                  }`
+                }
+              >
+                <MessageCircleDashed className="w-5 h-5" />
+                FAQs
+              </NavLink>
+            </li>
             <li>
               <NavLink
                 to="products"

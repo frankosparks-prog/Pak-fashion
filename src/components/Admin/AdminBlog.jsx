@@ -32,9 +32,9 @@
 //     fetchBlogs();
 //   }, []);
 
-  // const handleChange = (e) => {
-  //   setForm({ ...form, [e.target.name]: e.target.value });
-  // };
+// const handleChange = (e) => {
+//   setForm({ ...form, [e.target.name]: e.target.value });
+// };
 
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
@@ -200,6 +200,7 @@ import {
 } from "lucide-react";
 // import "react-quill/dist/quill.snow.css";
 import CircularProgress from "@mui/material/CircularProgress";
+import { toast } from "react-hot-toast";
 
 const API = process.env.REACT_APP_SERVER_URL; // vite / CRA
 
@@ -208,6 +209,7 @@ const PER_PAGE = 10;
 const AdminBlog = () => {
   /* ------------ state ------------ */
   const [blogs, setBlogs] = useState([]);
+  const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // form
@@ -233,7 +235,7 @@ const AdminBlog = () => {
       const { data } = await axios.get(`${API}/api/blogs`);
       setBlogs(data);
     } catch {
-      alert("Failed loading blogs");
+      toast.error("Failed to load blogs");
     } finally {
       setLoading(false);
     }
@@ -243,8 +245,11 @@ const AdminBlog = () => {
     fetchBlogs();
   }, []);
 
-    const handleChange = (e) => {
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+  const handleImageChange = (e) => {
+    setImageFile(e.target.files[0]);
   };
   /* ------------ derived lists ------------ */
   const filtered = useMemo(() => {
@@ -273,23 +278,49 @@ const AdminBlog = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("title", form.title);
+    formData.append("description", form.description);
+    formData.append("author", form.author);
+    formData.append("date", form.date);
+    formData.append("content", form.content);
+    if (imageFile) formData.append("image", imageFile);
+
     try {
       if (editId) {
-        await axios.put(`${API}/api/blogs/${editId}`, form);
-        alert("Post updated");
+        await axios.put(`${API}/api/blogs/${editId}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        toast.success("Post updated");
       } else {
-        await axios.post(`${API}/api/blogs`, form);
-        alert("Post created");
+        await axios.post(`${API}/api/blogs`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        toast.success("Post created");
       }
       resetForm();
+      setImageFile(null);
       fetchBlogs();
     } catch {
-      alert("Error saving post");
+      toast.error("Error saving post");
     }
   };
 
+  // const handleEdit = (p) => {
+  //   setForm({ ...p, date: p.date?.slice(0, 10) });
+  //   setEditId(p._id);
+  //   window.scrollTo({ top: 0, behavior: "smooth" });
+  // };
   const handleEdit = (p) => {
-    setForm({ ...p, date: p.date?.slice(0, 10) });
+    setForm({
+      title: p.title,
+      description: p.description,
+      author: p.author,
+      date: p.date?.slice(0, 10),
+      content: p.content,
+      image: p.image || "",
+    });
+    setImageFile(null); // So it doesn't override on edit unless a new one is picked
     setEditId(p._id);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -300,7 +331,7 @@ const AdminBlog = () => {
       await axios.delete(`${API}/api/blogs/${id}`);
       setBlogs((prev) => prev.filter((b) => b._id !== id));
     } catch {
-      alert("Error deleting");
+      toast.error("Error deleting");
     }
   };
 
@@ -374,6 +405,22 @@ const AdminBlog = () => {
             required
           />
         </div>
+        <div>
+          <label className="text-sm font-semibold">Image</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="w-full border border-gray-300 p-2 rounded mt-1"
+          />
+          {(imageFile || form.image) && (
+            <img
+              src={imageFile ? URL.createObjectURL(imageFile) : form.image}
+              alt="Preview"
+              className="w-24 h-24 mt-2 rounded object-cover border"
+            />
+          )}
+        </div>
 
         {/* react-quill */}
         {/* <ReactQuill
@@ -414,7 +461,7 @@ const AdminBlog = () => {
       {/* ===== list ===== */}
       {loading ? (
         <div className="flex justify-center items-center py-20">
-          <CircularProgress style={{ color: "#D97706" }} />{" "}
+          <CircularProgress style={{ color: "black" }} />{" "}
           {/* Tailwind amber-600 */}
         </div>
       ) : filtered.length === 0 ? (
@@ -425,36 +472,43 @@ const AdminBlog = () => {
             {paginated.map((post) => (
               <div
                 key={post._id}
-                className="border p-4 rounded shadow-sm bg-gray-50"
+                className="border p-4 rounded shadow-sm bg-gray-50 flex gap-4"
               >
-                <h3 className="font-semibold text-lg">{post.title}</h3>
-                <p
-                  className="text-sm text-gray-600 line-clamp-2"
-                  dangerouslySetInnerHTML={{ __html: post.description }}
-                />
-                <p className="text-xs mt-1 text-gray-500">
-                  {post.author} · {new Date(post.date).toLocaleDateString()}
-                </p>
-
-                <div className="flex gap-4 mt-2">
-                  <button
-                    onClick={() => setActivePost(post)}
-                    className="text-amber-600 flex items-center gap-1 hover:underline"
-                  >
-                    <Eye size={16} /> Read
-                  </button>
-                  <button
-                    onClick={() => handleEdit(post)}
-                    className="text-blue-600 flex items-center gap-1 hover:underline"
-                  >
-                    <PencilLine size={16} /> Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(post._id)}
-                    className="text-red-600 flex items-center gap-1 hover:underline"
-                  >
-                    <Trash2 size={16} /> Delete
-                  </button>
+                {post.image && (
+                  <img
+                    src={post.image}
+                    alt={post.title}
+                    className="w-24 h-24 object-cover rounded border"
+                  />
+                )}
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg">{post.title}</h3>
+                  <p className="text-sm text-gray-600 line-clamp-2">
+                    {post.description}
+                  </p>
+                  <p className="text-xs mt-1 text-gray-500">
+                    {post.author} · {new Date(post.date).toLocaleDateString()}
+                  </p>
+                  <div className="flex gap-4 mt-2">
+                    <button
+                      onClick={() => setActivePost(post)}
+                      className="text-amber-600 flex items-center gap-1 hover:underline"
+                    >
+                      <Eye size={16} /> Read
+                    </button>
+                    <button
+                      onClick={() => handleEdit(post)}
+                      className="text-blue-600 flex items-center gap-1 hover:underline"
+                    >
+                      <PencilLine size={16} /> Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(post._id)}
+                      className="text-red-600 flex items-center gap-1 hover:underline"
+                    >
+                      <Trash2 size={16} /> Delete
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -493,7 +547,11 @@ const AdminBlog = () => {
             >
               <X size={20} />
             </button>
-
+            <img
+              src={activePost.image}
+              alt={activePost.title}
+              className="w-full max-h-72 object-cover rounded mb-4"
+            />
             <h2 className="text-2xl font-bold mb-2">{activePost.title}</h2>
             <p className="text-sm mb-4 text-gray-600">
               {activePost.author} ·{" "}

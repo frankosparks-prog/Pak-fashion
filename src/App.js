@@ -54,6 +54,8 @@ import AdminLogin from "./components/Admin/AdminLogin";
 import ThankYouPage from "./pages/ThankYou";
 import FAQs from "./pages/FAQs";
 import Testimonials from "./pages/Testimonials";
+import AdminFAQs from "./components/Admin/AdminFAQs";
+import Comments from "./components/Admin/Comments";
 
 // 👇 create a wrapper component to manage layout
 function AppLayout() {
@@ -65,25 +67,6 @@ function AppLayout() {
   return (
     <>
       <ScrollToTop />
-      {/* <Toaster
-        position="top-right"
-        toastOptions={{
-          style: {
-            background: '#f59e0b',
-            color: 'white',
-            borderRadius: '8px',
-            padding: '12px 16px',
-            fontWeight: '500',
-            boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
-          },
-          success: {
-            iconTheme: {
-              primary: 'white',
-              secondary: '#92400e',
-            },
-          },
-        }}
-      /> */}
       <Toaster
   position="top-right"
   toastOptions={{
@@ -158,7 +141,9 @@ function AppRoutes() {
         <Route path="subscribed" element={<Subscribed />} />
         <Route path="blog" element={<AdminBlog />} />
         <Route path="testimonials" element={<AdminTestimonials />} />
+        <Route path="comments" element={<Comments />} />
         <Route path="products" element={<ManageProducts />} />
+        <Route path="faqs" element={<AdminFAQs />} />
         <Route path="payments" element={<ViewPayment />} />
       </Route>
     </Routes>

@@ -48,10 +48,10 @@ const Subscribed = () => {
 
       {loading ? (
         <div className="flex items-center justify-center h-screen">
-          <CircularProgress size={40} sx={{ color: "#D97706" }} />
+          <CircularProgress size={40} sx={{ color: "black" }} />
         </div>
       ) : error ? (
-        <p className="text-red-500">{error}</p>
+        <p className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded shadow-md flex items-center justify-center">{error}</p>
       ) : subscribers.length === 0 ? (
         <p className="text-gray-500">No subscribers found.</p>
       ) : (

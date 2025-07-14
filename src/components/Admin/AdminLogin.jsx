@@ -7,11 +7,13 @@ const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const AdminLogin = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await axios.post(`${SERVER_URL}/api/admin/login`, { username, password });
 
@@ -25,6 +27,8 @@ const AdminLogin = () => {
     } catch (err) {
       console.error("Login Error:", err.response || err);
       setError(err.response?.data?.message || 'Login failed due to server error');
+    } finally {
+      setLoading(false);
     }
   };
 const handleHome = () => {
@@ -35,13 +39,13 @@ const handleHome = () => {
       className="relative flex justify-center items-center w-screen h-screen bg-cover bg-center"
       style={{
         backgroundImage:
-          "url('https://picsum.photos/800/350?random=20')", // Example image URL
+          "url('https://picsum.photos/800/350?random=17')", // Example image URL
         backgroundSize: 'cover',
       }}
     >
       <div className="absolute inset-0 bg-black bg-opacity-40 z-0" />
-      <div className="relative z-10 bg-white/90 backdrop-blur-lg p-10 rounded-2xl shadow-2xl w-full max-w-md border border-amber-200">
-        <h2 className="text-3xl font-bold text-center text-amber-700 mb-6">Beadworks Admin</h2>
+      <div className="relative z-10 bg-white/90 backdrop-blur-lg p-10 rounded-2xl shadow-2xl w-full max-w-md border border-yellow-200">
+        <h2 className="text-3xl font-bold text-center text-yellow-600 mb-6">Pak Fashions Admin</h2>
         <p className="text-sm text-center text-gray-500 mb-8">Enter your credentials to access the dashboard</p>
         <form onSubmit={handleLogin}>
           <div className="mb-5">
@@ -51,7 +55,7 @@ const handleHome = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
             />
           </div>
           <div className="mb-6">
@@ -61,19 +65,22 @@ const handleHome = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
             />
           </div>
           {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
           <button
             type="submit"
-            className="w-full py-3 bg-amber-600 text-white font-semibold rounded-xl hover:bg-amber-700 transition duration-200"
+            className={`w-full py-3 bg-yellow-600 text-white font-semibold rounded-xl hover:bg-yellow-700 transition duration-200
+              ${loading ? ' opacity-50 cursor-not-allowed' : ''}`
+            }
+            disabled={loading}
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
         <div className="mt-6 text-center text-gray-400 text-xs flex flex-col items-center gap-2">
-          <span>© 2025 Beadworks. Admin Access Only.</span>
+          <span>© 2025 Pak Fashions. Admin Access Only.</span>
           <button onClick={handleHome} className='text-blue-500'>To Home</button>
         </div>
       </div>
