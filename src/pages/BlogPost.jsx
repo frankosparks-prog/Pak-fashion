@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Calendar, ArrowLeft, MessageSquare } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
@@ -33,10 +34,14 @@ function BlogPost() {
     const getSuffix = (d) => {
       if (d > 3 && d < 21) return "th";
       switch (d % 10) {
-        case 1: return "st";
-        case 2: return "nd";
-        case 3: return "rd";
-        default: return "th";
+        case 1:
+          return "st";
+        case 2:
+          return "nd";
+        case 3:
+          return "rd";
+        default:
+          return "th";
       }
     };
     return `${day}${getSuffix(day)} ${month} ${year}`;
@@ -72,6 +77,95 @@ function BlogPost() {
 
   return (
     <div className="min-h-screen bg-white text-black mt-12">
+      <Helmet>
+        <title>{blog.title} | Pak Fashions Blog</title>
+        <meta
+          name="description"
+          content={
+            blog.content.length > 160
+              ? blog.content.slice(0, 160) + "..."
+              : blog.content
+          }
+        />
+        <meta
+          name="keywords"
+          content={`fashion, blog, article, ${blog.author}, ${blog.title}, Pak Fashions`}
+        />
+        <meta name="author" content={blog.author} />
+        <meta name="robots" content="index, follow" />
+
+        {/* Open Graph (Facebook/LinkedIn) */}
+        <meta property="og:title" content={blog.title} />
+        <meta
+          property="og:description"
+          content={
+            blog.content.length > 160
+              ? blog.content.slice(0, 160) + "..."
+              : blog.content
+          }
+        />
+        <meta property="og:type" content="article" />
+        <meta
+          property="og:url"
+          content={`https://pakfashions.co.ke/blog/${blog._id}`}
+        />
+        <meta
+          property="og:image"
+          content={
+            blog.image || "https://pakfashions.co.ke/default-og-image.jpg"
+          }
+        />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={blog.title} />
+        <meta
+          name="twitter:description"
+          content={
+            blog.content.length > 160
+              ? blog.content.slice(0, 160) + "..."
+              : blog.content
+          }
+        />
+        <meta
+          name="twitter:image"
+          content={
+            blog.image || "https://pakfashions.co.ke/default-og-image.jpg"
+          }
+        />
+
+        {/* Structured Data (JSON-LD) */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            headline: blog.title,
+            description:
+              blog.content.length > 160
+                ? blog.content.slice(0, 160) + "..."
+                : blog.content,
+            author: {
+              "@type": "Person",
+              name: blog.author,
+            },
+            datePublished: blog.date,
+            image:
+              blog.image || "https://pakfashions.co.ke/default-og-image.jpg",
+            publisher: {
+              "@type": "Organization",
+              name: "Pak Fashions",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://pakfashions.co.ke/logo.png",
+              },
+            },
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": `https://pakfashions.co.ke/blog/${blog._id}`,
+            },
+          })}
+        </script>
+      </Helmet>
       {/* Header Section */}
       <div className="bg-yellow-100 text-center py-16 px-6 shadow-sm">
         <h1 className="text-4xl font-extrabold mb-4 max-w-3xl mx-auto leading-tight tracking-wide">
@@ -105,7 +199,8 @@ function BlogPost() {
         <hr className="my-10 border-yellow-300" />
 
         <p className="text-sm italic text-yellow-600">
-          Written by <span className="font-medium text-black">{blog.author}</span>
+          Written by{" "}
+          <span className="font-medium text-black">{blog.author}</span>
         </p>
       </article>
 
@@ -121,14 +216,18 @@ function BlogPost() {
             placeholder="Your name"
             className="w-full px-4 py-2 border border-yellow-300 rounded focus:outline-none"
             value={newComment.name}
-            onChange={(e) => setNewComment({ ...newComment, name: e.target.value })}
+            onChange={(e) =>
+              setNewComment({ ...newComment, name: e.target.value })
+            }
           />
           <textarea
             rows={4}
             placeholder="Write your comment..."
             className="w-full px-4 py-2 border border-yellow-300 rounded focus:outline-none"
             value={newComment.text}
-            onChange={(e) => setNewComment({ ...newComment, text: e.target.value })}
+            onChange={(e) =>
+              setNewComment({ ...newComment, text: e.target.value })
+            }
           ></textarea>
           <button
             type="submit"
@@ -151,7 +250,9 @@ function BlogPost() {
               </div>
             ))
           ) : (
-            <p className="text-sm italic text-gray-500">No comments yet. Be the first to comment!</p>
+            <p className="text-sm italic text-gray-500">
+              No comments yet. Be the first to comment!
+            </p>
           )}
         </div>
       </section>
@@ -160,7 +261,6 @@ function BlogPost() {
 }
 
 export default BlogPost;
-
 
 // import React, { useEffect, useState } from "react";
 // import { useParams, useNavigate } from "react-router-dom";

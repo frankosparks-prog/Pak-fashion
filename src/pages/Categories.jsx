@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import axios from "axios";
+import { Helmet } from "react-helmet-async";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
@@ -34,6 +35,48 @@ const Categories = () => {
 
   return (
     <div className="min-h-screen px-6 py-20 mt-12 bg-white text-black">
+      <Helmet>
+        <title>{categoryName} | Shop by Category - Pak Fashions</title>
+        <meta
+          name="description"
+          content={`Explore premium fashion products under the ${categoryName} category at Pak Fashions. Stylish, affordable, and high-quality pieces.`}
+        />
+        <meta
+          name="keywords"
+          content={`fashion, ${categoryName}, clothing, style, Pak Fashions, shop category`}
+        />
+        <meta name="author" content="Pak Fashions" />
+        <meta name="robots" content="index, follow" />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:title" content={`${categoryName} | Pak Fashions`} />
+        <meta
+          property="og:description"
+          content={`Discover top ${categoryName} picks curated by Pak Fashions. Quality fashion for all tastes.`}
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:url"
+          content={`https://pakfashions.co.ke/category/${categoryName}`}
+        />
+        <meta
+          property="og:image"
+          content="https://pakfashions.co.ke/images/category-banner.png"
+        />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${categoryName} | Pak Fashions`} />
+        <meta
+          name="twitter:description"
+          content={`Explore top-rated ${categoryName} items at Pak Fashions. Clothing & fashion redefined.`}
+        />
+        <meta
+          name="twitter:image"
+          content="https://pakfashions.co.ke/pak-circle.png"
+        />
+      </Helmet>
+
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-extrabold text-black mb-10 text-center">
           <span className="bg-yellow-400 px-4 py-1 rounded-xl text-black shadow">
@@ -46,11 +89,13 @@ const Categories = () => {
             <CircularProgress style={{ color: "black" }} />
           </div>
         ) : error ? (
-           <p className="text-center text-red-600 bg-red-100 border border-red-300 px-4 py-2 rounded-md w-fit mx-auto font-semibold mb-6">
-              {error}
-            </p>
+          <p className="text-center text-red-600 bg-red-100 border border-red-300 px-4 py-2 rounded-md w-fit mx-auto font-semibold mb-6">
+            {error}
+          </p>
         ) : products.length === 0 ? (
-          <p className="text-center text-red-600 bg-red-100 border border-red-300 px-4 py-2 rounded-md w-fit mx-auto font-semibold mb-6">No products found in this category.</p>
+          <p className="text-center text-red-600 bg-red-100 border border-red-300 px-4 py-2 rounded-md w-fit mx-auto font-semibold mb-6">
+            No products found in this category.
+          </p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
             {products.map((product) => (

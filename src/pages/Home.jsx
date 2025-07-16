@@ -103,8 +103,34 @@ function Home() {
           name="twitter:image"
           content="https://pakfashions.co.ke/PakFashions-logo.jpg"
         />
-      </Helmet>
 
+        {/* JSON-LD Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ClothingStore",
+            name: "Pak Fashions",
+            image: "https://pakfashions.co.ke/PakFashions-logo.jpg",
+            description:
+              "Stylish and affordable clothing store for men, women, and kids. Based in Nanyuki, Laikipia, Kenya.",
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: "237G+MQ6, Nanyuki",
+              addressLocality: "Nanyuki",
+              addressRegion: "Laikipia",
+              addressCountry: "KE",
+            },
+            telephone: "+254 726 329 260",
+            email: "info@pakfashion.co.za",
+            url: "https://pakfashions.co.ke",
+            sameAs: [
+              "https://facebook.com/pakfashions",
+              "https://instagram.com/pakfashions",
+            ],
+            openingHours: "Mo-Su 07:00-21:00",
+          })}
+        </script>
+      </Helmet>
       {fontLink}
       <main
         className="min-h-screen bg-white text-black"

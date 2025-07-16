@@ -3,6 +3,7 @@ import { useCart } from "../context/CartContext";
 import { Trash2, Plus, Minus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { FaWhatsapp } from "react-icons/fa";
+import { Helmet } from "react-helmet-async";
 
 function Cart() {
   const phoneNumber = "254738380692";
@@ -27,9 +28,9 @@ function Cart() {
     message += cartItems
       .map(
         (item, index) =>
-          `${index + 1}. *${item.name}*\n📦 Qty: ${item.quantity}\n💰 Price: Ksh ${item.price.toFixed(
-            2
-          )}\n🖼️ Image: ${item.image}\n`
+          `${index + 1}. *${item.name}*\n📦 Qty: ${
+            item.quantity
+          }\n💰 Price: Ksh ${item.price.toFixed(2)}\n🖼️ Image: ${item.image}\n`
       )
       .join("\n");
     message += `\n\n🧾 *Subtotal:* Ksh ${subtotal.toFixed(
@@ -46,6 +47,45 @@ function Cart() {
 
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-10 mt-14 grid grid-cols-1 lg:grid-cols-3 gap-10 bg-white">
+      <Helmet>
+        <title>Your Cart | Pak Fashions</title>
+        <meta
+          name="description"
+          content="Review your selected fashion items in the cart. Adjust quantities, remove items, or proceed to checkout or WhatsApp booking with ease."
+        />
+        <meta
+          name="keywords"
+          content="fashion cart, shopping cart, pak fashions cart, buy clothes online Kenya, fashion checkout"
+        />
+        <meta name="author" content="Pak Fashions" />
+        <meta name="robots" content="index, follow" />
+
+        {/* Open Graph for Facebook, LinkedIn, etc. */}
+        <meta property="og:title" content="Your Cart | Pak Fashions" />
+        <meta
+          property="og:description"
+          content="Explore the items you've added to your Pak Fashions cart. Continue shopping or place your order via WhatsApp."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://pakfashions.co.ke/cart" />
+        <meta
+          property="og:image"
+          content="https://pakfashions.co.ke/pak-circle.png"
+        />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Your Cart | Pak Fashions" />
+        <meta
+          name="twitter:description"
+          content="Review your cart items and place your fashion order from Pak Fashions."
+        />
+        <meta
+          name="twitter:image"
+          content="https://pakfashions.co.ke/pak-circle.png"
+        />
+      </Helmet>
+
       {/* Cart Items */}
       <section className="lg:col-span-2 space-y-6">
         <h2 className="text-4xl font-extrabold text-black border-b pb-4">
@@ -67,9 +107,7 @@ function Cart() {
               />
               <div className="flex flex-col justify-between flex-grow">
                 <div>
-                  <h3 className="text-xl font-bold text-black">
-                    {item.name}
-                  </h3>
+                  <h3 className="text-xl font-bold text-black">{item.name}</h3>
                   <p className="text-yellow-600 font-semibold mt-1">
                     Ksh {item.price.toFixed(2)}
                   </p>
@@ -140,7 +178,6 @@ function Cart() {
 }
 
 export default Cart;
-
 
 // import React from 'react';
 // import { useCart } from '../context/CartContext';

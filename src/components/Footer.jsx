@@ -262,8 +262,8 @@ function Footer() {
           <div>
             <h4 className="text-xl font-semibold mb-4 text-yellow-400">Contact Us</h4>
             <p className="text-sm text-gray-400 mb-2">Email: info@pakfashion.com</p>
-            <p className="text-sm text-gray-400 mb-4">Call/WhatsApp: +254 712 345 678</p>
-            <p className="text-sm text-gray-400 mb-6">Working Hours: Mon–Sat, 9am–6pm</p>
+            <p className="text-sm text-gray-400 mb-4">Call/WhatsApp: +254 726 329 260</p>
+            <p className="text-sm text-gray-400 mb-6">Working Hours: Mon–Sun, 7am–9pm</p>
             <div className="flex justify-center sm:justify-start gap-5">
               {[
                 { href: 'https://facebook.com', icon: <Facebook />, label: 'Facebook' },

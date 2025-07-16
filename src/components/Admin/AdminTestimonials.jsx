@@ -8,11 +8,18 @@ function AdminTestimonials() {
   const [form, setForm] = useState({ name: "", message: "", isVerified: false });
   const [editingId, setEditingId] = useState(null);
 
-  // Fetch all testimonials
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const testimonialsPerPage = 5;
+
+  // Selected testimonials for bulk deletion
+  const [selectedIds, setSelectedIds] = useState([]);
+
   const fetchTestimonials = async () => {
     try {
       const res = await axios.get(`${SERVER_URL}/api/testimonials`);
       setTestimonials(res.data);
+      setSelectedIds([]); // Reset selection on reload
     } catch (err) {
       console.error("Error fetching testimonials:", err);
     }
@@ -58,6 +65,35 @@ function AdminTestimonials() {
     setEditingId(testimonial._id);
   };
 
+  const toggleSelect = (id) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedIds.length === 0) return;
+    if (!window.confirm(`Delete ${selectedIds.length} testimonials?`)) return;
+
+    try {
+      await Promise.all(
+        selectedIds.map((id) =>
+          axios.delete(`${SERVER_URL}/api/testimonials/${id}`)
+        )
+      );
+      setSelectedIds([]);
+      fetchTestimonials();
+    } catch (err) {
+      console.error("Bulk delete error:", err);
+    }
+  };
+
+  // Pagination logic
+  const indexOfLast = currentPage * testimonialsPerPage;
+  const indexOfFirst = indexOfLast - testimonialsPerPage;
+  const currentTestimonials = testimonials.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(testimonials.length / testimonialsPerPage);
+
   return (
     <div className="p-6 bg-white text-amber-900">
       <h2 className="text-2xl font-bold mb-4">Manage Testimonials</h2>
@@ -95,14 +131,35 @@ function AdminTestimonials() {
         </button>
       </form>
 
+      {/* Bulk Delete Button */}
+      {selectedIds.length > 0 && (
+        <div className="mb-4">
+          <button
+            onClick={handleBulkDelete}
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+          >
+            Delete Selected ({selectedIds.length})
+          </button>
+        </div>
+      )}
+
       {/* Testimonials List */}
       <ul className="space-y-6">
-        {testimonials.map((t) => (
+        {currentTestimonials.map((t) => (
           <li
             key={t._id}
-            className="border border-amber-300 rounded p-4 bg-amber-50"
+            className={`border border-amber-300 rounded p-4 ${
+              selectedIds.includes(t._id) ? "bg-amber-100" : "bg-amber-50"
+            }`}
           >
-            <p className="font-semibold">{t.name}</p>
+            <label className="flex items-center gap-2 mb-2">
+              <input
+                type="checkbox"
+                checked={selectedIds.includes(t._id)}
+                onChange={() => toggleSelect(t._id)}
+              />
+              <span className="font-semibold">{t.name}</span>
+            </label>
             <p className="italic mb-2">"{t.message}"</p>
             <p className="text-sm">
               Status:{" "}
@@ -131,6 +188,27 @@ function AdminTestimonials() {
           </li>
         ))}
       </ul>
+
+      {/* Pagination Controls */}
+      <div className="flex justify-center items-center gap-4 mt-8">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <span className="font-semibold">
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+          className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }

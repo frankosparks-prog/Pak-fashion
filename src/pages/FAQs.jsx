@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -12,7 +13,8 @@ function FAQs() {
     const fetchFAQs = async () => {
       try {
         const res = await axios.get(`${SERVER_URL}/api/faq`);
-        setFaqs(res.data);
+        // setFaqs(res.data);
+        setFaqs(res.data.filter((t) => t.isVerified));
       } catch (err) {
         console.error("Failed to fetch FAQs:", err);
       }
@@ -27,6 +29,45 @@ function FAQs() {
 
   return (
     <div className="min-h-screen bg-white px-6 py-16 sm:px-12 lg:px-24 font-sans text-black mt-12">
+      <Helmet>
+        <title>FAQs | Pak Fashions</title>
+        <meta
+          name="description"
+          content="Find answers to the most frequently asked questions about Pak Fashions' products, shipping, orders, and more."
+        />
+        <meta
+          name="keywords"
+          content="Pak Fashions FAQs, fashion questions, shipping info, order help, clothing support"
+        />
+        <meta name="author" content="Pak Fashions" />
+        <meta name="robots" content="index, follow" />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:title" content="FAQs | Pak Fashions" />
+        <meta
+          property="og:description"
+          content="Common questions answered about shopping, shipping, and support from Pak Fashions."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://pakfashions.co.ke/faqs" />
+        <meta
+          property="og:image"
+          content="https://pakfashions.co.ke/pak-fashions.png"
+        />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="FAQs | Pak Fashions" />
+        <meta
+          name="twitter:description"
+          content="Get help with your orders, shipping, and more from our FAQ section."
+        />
+        <meta
+          name="twitter:image"
+          content="https://pakfashions.co.ke/pak-fashions.png"
+        />
+      </Helmet>
+
       <div className="max-w-4xl mx-auto text-center mb-12">
         <h1 className="text-4xl font-extrabold text-black mb-4">
           Frequently Asked Questions

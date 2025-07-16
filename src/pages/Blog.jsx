@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Calendar } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -53,6 +54,65 @@ function Blog() {
 
   return (
     <div className="min-h-screen bg-white mt-12 md:mt-4">
+      <Helmet>
+        <title>Fashion Blog | Pak Fashions</title>
+        <meta
+          name="description"
+          content="Explore the latest in fashion trends, styling tips, and behind-the-scenes stories at Pak Fashions."
+        />
+        <meta
+          name="keywords"
+          content="fashion blog, style tips, clothing trends, Pak Fashions blog, Nanyuki, Laikipia, sustainable fashion"
+        />
+        <meta name="author" content="Pak Fashions" />
+        <meta name="robots" content="index, follow" />
+
+        {/* Open Graph */}
+        <meta property="og:title" content="Fashion Blog | Pak Fashions" />
+        <meta
+          property="og:description"
+          content="Stories, insights, and styling inspiration from the world of fashion."
+        />
+        <meta
+          property="og:image"
+          content="https://pakfashions.co.ke/PakFashionslogo.jpg"
+        />
+        <meta property="og:url" content="https://pakfashions.co.ke/blog" />
+        <meta property="og:type" content="article" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Fashion Blog | Pak Fashions" />
+        <meta
+          name="twitter:description"
+          content="Explore the latest fashion tips and trends from Pak Fashions."
+        />
+        <meta
+          name="twitter:image"
+          content="https://pakfashions.co.ke/PakFashionslogo.jpg"
+        />
+
+        {/* Optional Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Blog",
+            name: "Pak Fashions Blog",
+            description:
+              "Stories, insights, and styling inspiration from the world of fashion.",
+            url: "https://pakfashions.co.ke/blog",
+            publisher: {
+              "@type": "Organization",
+              name: "Pak Fashions",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://pakfashions.co.ke/pak-fashion.jpg",
+              },
+            },
+          })}
+        </script>
+      </Helmet>
+
       {/* Hero Section */}
       <section className="bg-yellow-100 text-center py-16 px-4">
         <h1 className="text-5xl font-extrabold tracking-tight mb-3 text-black">
@@ -96,7 +156,6 @@ function Blog() {
                 >
                   Read more →
                 </button>
-
               </div>
             ))
           ) : (
@@ -104,20 +163,19 @@ function Blog() {
               No blog posts available.
             </div>
           )}
-          
         </section>
       )}
-              {/* Show More / Show Less Button */}
-                {posts.length > 9 && (
-                  <div className="text-center mt-2">
-                    <button
-                      onClick={() => setShowAll(!showAll)}
-                      className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-3 px-6 rounded-full shadow transition"
-                    >
-                      {showAll ? "Show Less" : "Show More"}
-                    </button>
-                  </div>
-                )}
+      {/* Show More / Show Less Button */}
+      {posts.length > 9 && (
+        <div className="text-center mt-2">
+          <button
+            onClick={() => setShowAll(!showAll)}
+            className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-3 px-6 rounded-full shadow transition"
+          >
+            {showAll ? "Show Less" : "Show More"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -148,6 +148,7 @@ import {
 import { toast } from "react-hot-toast";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { Helmet } from "react-helmet-async";
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -198,13 +199,84 @@ function Contact() {
 
   return (
     <div className="min-h-screen bg-white text-black px-6 py-20 mt-12">
+      <Helmet>
+        <title>Contact Us | Pak Fashions</title>
+        <meta
+          name="description"
+          content="Get in touch with Pak Fashions for inquiries, support, or feedback. We're here to help you on your sustainable fashion journey."
+        />
+        <meta
+          name="keywords"
+          content="contact Pak Fashions, get in touch, fashion help, customer support, Nyeri, Nanyuki, Kenya"
+        />
+        <meta name="author" content="Pak Fashions" />
+        <meta name="robots" content="index, follow" />
+
+        {/* Open Graph Tags */}
+        <meta property="og:title" content="Contact Us | Pak Fashions" />
+        <meta
+          property="og:description"
+          content="Reach out to Pak Fashions via email, phone, WhatsApp, or visit our location in Nanyuki."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://pakfashions.co.ke/contact" />
+        <meta
+          property="og:image"
+          content="https://pakfashions.co.ke/pak-fashions.jpg"
+        />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Contact Us | Pak Fashions" />
+        <meta
+          name="twitter:description"
+          content="Reach out to Pak Fashions via email, phone, WhatsApp, or visit our location in Nanyuki."
+        />
+        <meta
+          name="twitter:image"
+          content="https://pakfashions.co.ke/pak-fashions.jpg"
+        />
+
+        {/* JSON-LD Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "Pak Fashions",
+            url: "https://pakfashions.co.ke",
+            email: "info@pakfashion.co.za",
+            telephone: "+254 726 329 260",
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: "237G+MQ6, Nanyuki",
+              addressLocality: "Nanyuki",
+              addressRegion: "Laikipia",
+              addressCountry: "KE",
+            },
+            contactPoint: {
+              "@type": "ContactPoint",
+              telephone: "+254 726 329 260",
+              contactType: "Customer Support",
+              areaServed: "KE",
+              availableLanguage: "en",
+            },
+            sameAs: [
+              "https://wa.me/27112223333",
+              "https://facebook.com/your-page",
+              "https://instagram.com/your-page",
+            ],
+          })}
+        </script>
+      </Helmet>
+
       {/* Hero Section */}
       <div className="text-center mb-20" data-aos="fade-down">
         <h1 className="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight">
           Contact <span className="text-yellow-500">Pak Fashions</span>
         </h1>
         <p className="text-lg md:text-xl max-w-3xl mx-auto text-gray-700 leading-relaxed">
-          Questions? Feedback? We're always here to help with your sustainable fashion journey.
+          Questions? Feedback? We're always here to help with your sustainable
+          fashion journey.
         </p>
         <div className="w-20 h-1 bg-yellow-500 mx-auto mt-6 rounded-full" />
       </div>
@@ -221,7 +293,10 @@ function Contact() {
             <FaEnvelope className="text-4xl text-yellow-500 mt-1" />
             <div>
               <h3 className="text-xl font-bold mb-1">Email</h3>
-              <a href="mailto:info@pakfashion.co.za" className="text-gray-800 hover:underline break-words">
+              <a
+                href="mailto:info@pakfashion.co.za"
+                className="text-gray-800 hover:underline break-words"
+              >
                 info@pakfashion.co.za
               </a>
             </div>
@@ -231,8 +306,11 @@ function Contact() {
             <FaPhoneAlt className="text-4xl text-yellow-500 mt-1" />
             <div>
               <h3 className="text-xl font-bold mb-1">Phone</h3>
-              <a href="tel:+27112223333" className="text-gray-800 hover:underline">
-                +27 11 222 3333
+              <a
+                href="tel:+254726329260"
+                className="text-gray-800 hover:underline"
+              >
+                +254 726 329 260
               </a>
             </div>
           </div>
@@ -242,7 +320,7 @@ function Contact() {
             <div>
               <h3 className="text-xl font-bold mb-1">Visit Us</h3>
               <p className="text-gray-800">
-                Pakfashion Clothes, Nyeri-Nanyuki Road, Nanyuki
+                Pak Fashions Clothes, Nyeri-Nanyuki Road, Nanyuki
               </p>
             </div>
           </div>
@@ -324,7 +402,7 @@ function Contact() {
 
       {/* WhatsApp Floating Button */}
       <a
-        href="https://wa.me/27112223333?text=Hello!%20I%20have%20a%20question%20about%20pakfashion%20products."
+        href="https://wa.me/254726329260?text=Hello!%20I%20have%20a%20question%20about%20pakfashions%20products."
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-8 right-8 bg-green-500 text-white p-2 rounded-full shadow-lg hover:bg-green-600 transition z-50 animate-bounce"

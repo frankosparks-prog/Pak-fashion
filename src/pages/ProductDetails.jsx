@@ -3,6 +3,7 @@ import { FaHeart, FaStar, FaCartPlus } from "react-icons/fa";
 import { useParams, Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import axios from "axios";
+import { Helmet } from "react-helmet-async";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
@@ -98,6 +99,72 @@ const ProductDetails = () => {
 
   return (
     <>
+      {product && (
+        <Helmet>
+          <title>{`${product.name} | Pak Fashions`}</title>
+          <meta
+            name="description"
+            content={
+              product.description?.slice(0, 160) ||
+              "Elegant fashion from Pak Fashions"
+            }
+          />
+          <meta
+            name="keywords"
+            content={`fashion, ${product.category}, ${product.name}, pak fashions`}
+          />
+          <meta name="robots" content="index, follow" />
+
+          {/* Open Graph */}
+          <meta property="og:title" content={product.name} />
+          <meta
+            property="og:description"
+            content={product.description?.slice(0, 160)}
+          />
+          <meta property="og:image" content={product.image} />
+          <meta
+            property="og:url"
+            content={`https://pakfashions.co.ke/product/${product._id}`}
+          />
+          <meta property="og:type" content="product" />
+
+          {/* Twitter Card */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta
+            name="twitter:title"
+            content={`${product.name} | Pak Fashions`}
+          />
+          <meta
+            name="twitter:description"
+            content={product.description?.slice(0, 160)}
+          />
+          <meta name="twitter:image" content={product.image} />
+
+          {/* Structured Data (JSON-LD) */}
+          <script type="application/ld+json">
+            {JSON.stringify({
+              "@context": "https://schema.org/",
+              "@type": "Product",
+              name: product.name,
+              image: [product.image],
+              description: product.description,
+              sku: product._id,
+              offers: {
+                "@type": "Offer",
+                priceCurrency: "KES",
+                price: product.price,
+                availability: product.inStock ? "InStock" : "OutOfStock",
+                url: `https://pakfashions.co.ke/product/${product._id}`,
+              },
+              brand: {
+                "@type": "Brand",
+                name: "Pak Fashions",
+              },
+            })}
+          </script>
+        </Helmet>
+      )}
+
       {/* Product Section */}
       <section className="bg-white text-black px-6 py-16 mt-12">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center bg-yellow-50 shadow-2xl rounded-3xl p-8 md:p-14">

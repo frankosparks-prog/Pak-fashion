@@ -10,6 +10,7 @@ const PER_PAGE = 6;
 function Comments() {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedIds, setSelectedIds] = useState([]);
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
 
@@ -21,7 +22,6 @@ function Comments() {
         setComments(data);
       } catch {
         toast.error("Failed to fetch comments");
-        console.error("Error fetching comments");
       } finally {
         setLoading(false);
       }
@@ -40,6 +40,28 @@ function Comments() {
     }
   };
 
+  const handleBulkDelete = async () => {
+    if (selectedIds.length === 0) return;
+    if (!window.confirm(`Delete ${selectedIds.length} selected comment(s)?`)) return;
+
+    try {
+      await Promise.all(
+        selectedIds.map((id) => axios.delete(`${SERVER_URL}/api/blogs/comments/${id}`))
+      );
+      setComments((prev) => prev.filter((c) => !selectedIds.includes(c._id)));
+      setSelectedIds([]);
+      toast.success("Comments deleted");
+    } catch {
+      toast.error("Bulk delete failed");
+    }
+  };
+
+  const toggleSelect = (id) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
+
   const filteredComments = useMemo(() => {
     return comments.filter(
       (c) =>
@@ -51,6 +73,8 @@ function Comments() {
 
   const maxPage = Math.ceil(filteredComments.length / PER_PAGE);
   const paginated = filteredComments.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+
+  const allSelectedOnPage = paginated.every((c) => selectedIds.includes(c._id));
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
@@ -71,6 +95,36 @@ function Comments() {
         </label>
       </div>
 
+      {/* Select All & Bulk Delete */}
+      {paginated.length > 0 && (
+        <div className="flex items-center justify-between mb-4">
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={allSelectedOnPage}
+              onChange={(e) => {
+                const ids = paginated.map((c) => c._id);
+                if (e.target.checked) {
+                  setSelectedIds((prev) => [...new Set([...prev, ...ids])]);
+                } else {
+                  setSelectedIds((prev) => prev.filter((id) => !ids.includes(id)));
+                }
+              }}
+            />
+            <span className="text-sm text-gray-700">Select All on Page</span>
+          </label>
+
+          {selectedIds.length > 0 && (
+            <button
+              onClick={handleBulkDelete}
+              className="bg-red-600 text-white px-4 py-1.5 rounded hover:bg-red-700 text-sm"
+            >
+              Delete {selectedIds.length} Selected
+            </button>
+          )}
+        </div>
+      )}
+
       {loading ? (
         <div className="flex items-center justify-center h-screen">
           <CircularProgress size={40} sx={{ color: "black" }} />
@@ -83,13 +137,20 @@ function Comments() {
             {paginated.map((comment) => (
               <div
                 key={comment._id}
-                className="bg-gray-50 border rounded-lg p-4 shadow-sm hover:shadow-md transition"
+                className={`bg-gray-50 border rounded-lg p-4 shadow-sm hover:shadow-md transition ${
+                  selectedIds.includes(comment._id) ? "border-yellow-400 bg-yellow-50" : ""
+                }`}
               >
                 <div className="flex justify-between items-start">
                   <div>
-                    <h2 className="text-md font-semibold text-gray-800">
-                      {comment.name}
-                    </h2>
+                    <label className="flex items-center gap-2 mb-1">
+                      <input
+                        type="checkbox"
+                        checked={selectedIds.includes(comment._id)}
+                        onChange={() => toggleSelect(comment._id)}
+                      />
+                      <h2 className="text-md font-semibold text-gray-800">{comment.name}</h2>
+                    </label>
                     <p className="text-sm text-gray-600 italic mb-2">
                       On blog:{" "}
                       <span className="text-blue-600 font-medium">

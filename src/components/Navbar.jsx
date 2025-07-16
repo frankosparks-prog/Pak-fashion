@@ -471,7 +471,8 @@ function Navbar() {
               <ShoppingCart size={24} />
               {totalItems > 0 && (
                 <span
-                  className="absolute -top-1 -right-2 bg-black text-white rounded-full text-xs font-bold px-2 animate-pulse"
+                  // className="absolute -top-1 -right-2 bg-black text-white rounded-full text-sm font-bold px-2 animate-pulse "
+                  className="absolute top-[-4px] right-[-6px] bg-black text-white rounded-full text-xs font-semibold flex items-center justify-center w-5 h-5 md:w-5 md:h-5 shadow-md animate-pulse"
                   aria-live="polite"
                   aria-atomic="true"
                 >
