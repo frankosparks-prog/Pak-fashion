@@ -30,7 +30,7 @@ app.set('trust proxy', 1);
 const allowedOrigins = [
   "http://localhost:3000", // For development
   "http://localhost:3001",
-  "http://192.168.103.20:3000", // For local network access
+  "http://192.168.59.151:3001", // For local network access
   "http://192.168.101.234:3000", // For local network access
 ];
 

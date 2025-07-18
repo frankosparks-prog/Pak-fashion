@@ -312,6 +312,7 @@ function Home() {
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 max-w-6xl mx-auto">
             {instagram.map((item, index) => (
+              <Link to={`/product/${item._id}`}>
               <img
                 key={item._id}
                 src={item.image}
@@ -320,6 +321,7 @@ function Home() {
                 data-aos="zoom-in"
                 data-aos-delay={index * 100}
               />
+              </Link>
             ))}
           </div>
         </section>

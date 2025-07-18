@@ -207,7 +207,7 @@ function Contact() {
         />
         <meta
           name="keywords"
-          content="contact Pak Fashions, get in touch, fashion help, customer support, Nyeri, Nanyuki, Kenya"
+          content="contact Pak Fashions, get in touch, fashion help, customer support, Laikipia, Nanyuki, Kenya"
         />
         <meta name="author" content="Pak Fashions" />
         <meta name="robots" content="index, follow" />
@@ -320,7 +320,7 @@ function Contact() {
             <div>
               <h3 className="text-xl font-bold mb-1">Visit Us</h3>
               <p className="text-gray-800">
-                Pak Fashions Clothes, Nyeri-Nanyuki Road, Nanyuki
+                Pak Fashions Clothes, Behind Lumumba Road, Nanyuki
               </p>
             </div>
           </div>
