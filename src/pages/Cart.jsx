@@ -1,27 +1,27 @@
 import React from "react";
 import { useCart } from "../context/CartContext";
 import { Trash2, Plus, Minus } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { FaWhatsapp } from "react-icons/fa";
 import { Helmet } from "react-helmet-async";
 
 function Cart() {
   const phoneNumber = "254738380692";
   const { cartItems, removeFromCart, updateQuantity } = useCart();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const subtotal = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
 
-  const handleCheckout = () => {
-    if (cartItems.length === 0) {
-      alert("Your cart is empty!");
-    } else {
-      navigate("/checkout");
-    }
-  };
+  // const handleCheckout = () => {
+  //   if (cartItems.length === 0) {
+  //     alert("Your cart is empty!");
+  //   } else {
+  //     navigate("/checkout");
+  //   }
+  // };
 
   let message = "Hi, I'm interested in the following products:\n\n";
   if (cartItems.length > 0) {

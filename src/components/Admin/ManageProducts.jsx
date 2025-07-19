@@ -538,7 +538,7 @@
 //     </div>
 //   );
 // }
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Trash2, PencilLine } from "lucide-react";
@@ -590,10 +590,11 @@ export default function ManageProducts() {
     fetchProducts();
   }, []);
 
-  useEffect(() => {
-    applyFilters();
-    setCurrentPage(1);
-  }, [products, searchTerm, filterCategory, filterTag, filterCollection]);
+  // useEffect(() => {
+  //   applyFilters();
+  //   setCurrentPage(1);
+  // }, [products, searchTerm, filterCategory, filterTag, filterCollection]);
+
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -606,7 +607,7 @@ export default function ManageProducts() {
     setLoading(false);
   };
 
-  const applyFilters = () => {
+  const applyFilters = useCallback(() => {
     let filtered = [...products];
     if (searchTerm.trim()) {
       filtered = filtered.filter((p) =>
@@ -619,7 +620,12 @@ export default function ManageProducts() {
     if (filterCollection)
       filtered = filtered.filter((p) => p.collection === filterCollection);
     setFilteredProducts(filtered);
-  };
+  }, [products, searchTerm, filterCategory, filterTag, filterCollection]);
+
+  useEffect(() => {
+    applyFilters();
+    setCurrentPage(1);
+  }, [applyFilters]);
 
   const paginatedProducts = filteredProducts.slice(
     (currentPage - 1) * PAGE_SIZE,
@@ -1092,7 +1098,7 @@ export default function ManageProducts() {
                   onClick={() => handleDelete(product._id)}
                   className="text-red-600 hover:text-red-800"
                 >
-                 <Trash2 size={32} />
+                  <Trash2 size={32} />
                 </button>
               </div>
             </div>
