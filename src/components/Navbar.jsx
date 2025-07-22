@@ -366,9 +366,9 @@ function Navbar() {
                 <span className="hidden sm:inline">||</span>
                 <span className="hidden sm:inline">-&gt;&gt;</span>
               </div> */}
-              <span className="text-xl md:text-2xl font-bold text-black tracking-tight bg-yellow-400 px-3 py-1 rounded-full shadow-sm">
-                Pak Fashions&nbsp;
-                <span className="hidden sm:inline">Nanyuki</span>
+              <span className="text-xl md:text-2xl font-extrabold text-black tracking-tight px-3 py-1 rounded-full shadow-sm ml-20 md:ml-0">
+                PAK FASHIONS&nbsp;
+                {/* <span className="hidden sm:inline">Nanyuki</span> */}
               </span>
               {/* <span className="text-xl md:text-2xl font-extrabold text-blue-800 tracking-tight bg-blue-50 rounded-full px-3 py-1 shadow-sm">
                 PakFashion&nbsp;

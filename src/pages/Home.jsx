@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import axios from "axios";
-import { toast } from "react-hot-toast";
 import { ArrowRight, Truck, Sparkles, Users, Gift } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 
@@ -43,7 +42,6 @@ function Home() {
   // const [blogs, setBlogs] = useState([]);
   const [faq, setFaq] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
-  const [email, setEmail] = useState("");
   useEffect(() => {
     AOS.init({ duration: 1100, once: true });
     // Fetch all dynamic content
@@ -53,7 +51,7 @@ function Home() {
   const fetchData = async () => {
     try {
       const [featuredRes, faqRes, testimonialsRes] = await Promise.all([
-        axios.get(`${SERVER_URL}/api/products?tag=Featured&limit=3`),
+        axios.get(`${SERVER_URL}/api/products?category=Clearance Sale&limit=3`),
         // axios.get(`${SERVER_URL}/api/blogs?limit=3`),
         axios.get(`${SERVER_URL}/api/faq`),
         axios.get(`${SERVER_URL}/api/testimonials`),
@@ -68,17 +66,6 @@ function Home() {
     }
   };
 
-  const handleSubscribe = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post(`${SERVER_URL}/api/subscribe`, { email });
-      toast.success("Thanks for subscribing!");
-      setEmail("");
-    } catch (err) {
-      toast.error("Subscription failed. Please try again.");
-      console.error(err);
-    }
-  };
   return (
     <>
       <Helmet>
@@ -156,41 +143,35 @@ function Home() {
       >
         {/* Hero Section */}
         <section
-          className="relative flex flex-col justify-center items-center text-center px-6 py-32 md:py-40 bg-cover bg-center bg-black text-white"
-          style={{
-            backgroundImage: `linear-gradient(to bottom right, rgba(0, 0, 0, 0.7), rgba(0,0,0,0.7)), url('./PakFashionslogo.jpg')`,
-          }}
+          className="relative flex flex-col justify-center items-center text-center px-6 h-[50vh] md:h-auto py-20 md:py-40 bg-cover bg-center bg-black text-white"
+          // style={{
+          //   backgroundImage: `linear-gradient(to bottom right, rgba(0, 0, 0, 0.7), rgba(0,0,0,0.7)), url('./PakFashionslogo.jpg')`,
+          // }}
         >
-          {/* <section
-          className="relative flex flex-col justify-center items-center text-center px-6 py-32 md:py-40 bg-cover bg-center bg-black text-white"
-          style={{
-            backgroundImage: `linear-gradient(to bottom right, rgba(0, 0, 0, 0.7), rgba(0,0,0,0.7)), url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTon1Hk_Hhi4vMcBzAR-lp2JWeQDv_CiA7mdQ&s')`,
-          }}
-        > */}
           <h1
-            className="text-5xl md:text-6xl font-extrabold drop-shadow"
+            className="text-4xl md:text-6xl font-extrabold drop-shadow"
             data-aos="fade-down"
           >
-            <span className="text-yellow-400">Stylish Clothes</span> & More{" "}
+            <span className="text-yellow-600">Stylish Clothes</span> & More{" "}
             <br />
-            At <span className="text-yellow-300">Unbeatable Prices</span>
+            At <span className="text-yellow-600">Unbeatable Prices</span>
           </h1>
           <p
-            className="mt-6 max-w-xl text-lg md:text-xl text-yellow-100 font-medium"
+            className="mt-4 md:mt-6 max-w-xl text-base md:text-xl text-yellow-100 font-medium"
             data-aos="fade-up"
           >
             Discover quality loved fashion — refresh your wardrobe without
             hurting the planet.
           </p>
-          <Link to="/shop" className="mt-10" data-aos="zoom-in">
-            <button className="bg-yellow-400 text-black font-semibold px-10 py-4 rounded-full shadow hover:brightness-110 transform hover:scale-105 transition">
+          <Link to="/shop" className="mt-6 md:mt-10" data-aos="zoom-in">
+            <button className="bg-yellow-500 text-black font-semibold px-8 md:px-10 py-3 md:py-4 rounded-full shadow hover:brightness-110 transform hover:scale-105 transition">
               Shop Now
             </button>
           </Link>
         </section>
 
         {/* About Section */}
-        <section className="py-20 px-6 bg-white text-center">
+        {/* <section className="py-20 px-6 bg-white text-center">
           <h2
             className="text-4xl font-bold text-yellow-600 mb-6"
             data-aos="fade-up"
@@ -206,7 +187,7 @@ function Home() {
             Our carefully curated collection offers trendy options supporting
             the community and making the world a beautiful place.
           </p>
-        </section>
+        </section> */}
 
         {/* Featured Creations */}
         <section className="bg-yellow-50 py-20 px-6">
@@ -214,7 +195,7 @@ function Home() {
             className="text-4xl font-bold text-center text-black mb-14"
             data-aos="fade-up"
           >
-            Featured Picks
+            Top Sales
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 max-w-6xl mx-auto">
             {featured.map((item, index) => (
@@ -251,38 +232,6 @@ function Home() {
           </div>
         </section>
 
-        {/* Newsletter */}
-        <section
-          className="bg-black py-20 px-6 text-center text-white"
-          data-aos="fade-up"
-        >
-          <h2 className="text-4xl font-bold text-yellow-400 mb-4">
-            Join Our Fashion Community
-          </h2>
-          <p className="text-yellow-100 mb-6 text-lg">
-            Get updates on latest styles, exclusive deals, and tips.
-          </p>
-
-          <form
-            className="flex flex-col sm:flex-row gap-4 justify-center mt-6"
-            onSubmit={handleSubscribe}
-          >
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="px-5 py-3 rounded-full text-black focus:ring-yellow-300"
-            />
-            <button
-              type="submit"
-              className="bg-yellow-400 text-black font-semibold px-6 py-3 rounded-full hover:scale-105 transform transition"
-            >
-              Subscribe
-            </button>
-          </form>
-        </section>
-
         {/* Blog Section */}
         {/* <section className="bg-white py-20 px-6">
           <h2
@@ -301,7 +250,7 @@ function Home() {
               >
                 <img
                   src={`${blog.image}`}
-                  // src={`https://picsum.photos/400/300?random=${index + 1}`}
+                  // src={`https://picsum.photos/600/600?random=${index + 1}`}
                   alt={`Blog ${blog.title}`}
                   className="rounded mb-4"
                 />
@@ -331,7 +280,7 @@ function Home() {
             {perks.map((perk, idx) => (
               <div
                 key={idx}
-                className="bg-white p-6 rounded-2xl shadow hover:shadow-xl text-center transition duration-300 transform hover:-translate-y-1"
+                className="bg-white p-6 rounded-2xl shadow hover:shadow-xl text-center transition duration-600 transform hover:-translate-y-1"
                 data-aos="fade-up"
                 data-aos-delay={idx * 150}
               >
@@ -354,8 +303,8 @@ function Home() {
             What Our Customers Say
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {testimonials.slice(0, 3).map((testimonial, index) => (
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {testimonials.slice(0, 2).map((testimonial, index) => (
               <div
                 key={testimonial._id}
                 className="bg-yellow-50 p-6 rounded shadow"
@@ -392,7 +341,7 @@ function Home() {
             {faq.slice(0, 3).map((faq, index) => (
               <div
                 key={faq._id}
-                className="p-5 border border-yellow-300 rounded-lg"
+                className="p-5 border border-yellow-600 rounded-lg"
                 data-aos="fade-up"
                 data-aos-delay={index * 150}
               >

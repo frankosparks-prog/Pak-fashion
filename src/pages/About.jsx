@@ -86,13 +86,13 @@ function About() {
       {/* Hero Section */}
       <div className="text-center mb-20" data-aos="fade-down">
         <h1 className="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight text-black">
-          About <span className="text-yellow-500">Pak Fashions</span>
+          About <span className="text-yellow-600">Pak Fashions</span>
         </h1>
         <p className="text-lg md:text-xl max-w-3xl mx-auto text-gray-700 leading-relaxed">
           Quality loved fashion with a purpose — making style affordable,
           sustainable, and community-driven.
         </p>
-        <div className="w-20 h-1 bg-yellow-500 mx-auto mt-6 rounded-full" />
+        <div className="w-20 h-1 bg-yellow-600 mx-auto mt-6 rounded-full" />
       </div>
 
       {/* Our Story */}
@@ -100,12 +100,12 @@ function About() {
         <img
           src="https://images.unsplash.com/photo-1521334884684-d80222895322?auto=format&fit=crop&w=800&q=80"
           alt="Pak Fashion Store"
-          className="rounded-3xl shadow-2xl w-full object-cover h-96 hover:scale-105 transition-transform duration-500"
+          className="rounded-3xl shadow-2xl w-full object-cover h-96 hover:scale-105 transition-transform duration-600"
           data-aos="fade-right"
         />
         <div data-aos="fade-left">
           <h2 className="text-3xl md:text-4xl font-semibold mb-6">
-            <span className="border-l-4 border-yellow-500 pl-4">
+            <span className="border-l-4 border-yellow-600 pl-4">
               Our Story & Mission
             </span>
           </h2>
@@ -131,21 +131,21 @@ function About() {
           {[
             {
               icon: (
-                <FaRecycle className="text-5xl text-yellow-500 mb-5 mx-auto" />
+                <FaRecycle className="text-5xl text-yellow-600 mb-5 mx-auto" />
               ),
               title: "Sustainability",
               desc: "Giving the community a chance to be as beautiful as can be fostering love among each other.",
             },
             {
               icon: (
-                <FaUsers className="text-5xl text-yellow-500 mb-5 mx-auto" />
+                <FaUsers className="text-5xl text-yellow-600 mb-5 mx-auto" />
               ),
               title: "Community",
               desc: "Supporting local families and fostering connections through affordable, quality clothing.",
             },
             {
               icon: (
-                <FaHeart className="text-5xl text-yellow-500 mb-5 mx-auto" />
+                <FaHeart className="text-5xl text-yellow-600 mb-5 mx-auto" />
               ),
               title: "Passion",
               desc: "Passionate about fashion that’s both stylish and responsible.",
@@ -169,7 +169,7 @@ function About() {
         className="relative max-w-5xl mx-auto mb-24 px-8 py-12 bg-yellow-50 rounded-3xl shadow-xl"
         data-aos="fade-up"
       >
-        <div className="absolute inset-x-0 top-0 h-1 bg-yellow-500 rounded-t-3xl" />
+        <div className="absolute inset-x-0 top-0 h-1 bg-yellow-600 rounded-t-3xl" />
         <h2 className="text-3xl md:text-4xl font-semibold text-center mb-8 text-black">
           Why Shop With Pak Fashion?
         </h2>
@@ -184,7 +184,7 @@ function About() {
       {/* Contact CTA */}
       <div className="text-center" data-aos="zoom-in-up">
         <Link to="/contact" aria-label="Contact Us Page">
-          <button className="mt-6 inline-flex items-center gap-3 bg-yellow-500 hover:bg-yellow-600 text-black px-8 py-4 rounded-full text-xl font-semibold shadow-lg transition duration-300">
+          <button className="mt-6 inline-flex items-center gap-3 bg-yellow-600 hover:bg-yellow-600 text-black px-8 py-4 rounded-full text-xl font-semibold shadow-lg transition duration-300">
             <FaPhoneAlt className="text-lg" />
             Contact Us
           </button>
