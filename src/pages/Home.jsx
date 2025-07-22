@@ -149,7 +149,7 @@ function Home() {
           // }}
         >
           <h1
-            className="text-4xl md:text-6xl font-extrabold drop-shadow"
+            className="text-4xl md:text-6xl font-extrabold drop-shadow mt-8"
             data-aos="fade-down"
           >
             <span className="text-yellow-600">Stylish Clothes</span> & More{" "}
@@ -280,7 +280,7 @@ function Home() {
             {perks.map((perk, idx) => (
               <div
                 key={idx}
-                className="bg-white p-6 rounded-2xl shadow hover:shadow-xl text-center transition duration-600 transform hover:-translate-y-1"
+                className="bg-black p-6 rounded-2xl shadow hover:shadow-xl text-center transition duration-600 transform hover:-translate-y-1"
                 data-aos="fade-up"
                 data-aos-delay={idx * 150}
               >
@@ -288,7 +288,7 @@ function Home() {
                 <h3 className="text-lg font-semibold text-yellow-600 mb-2">
                   {perk.title}
                 </h3>
-                <p className="text-gray-700 text-sm">{perk.description}</p>
+                <p className="text-gray-200 text-sm">{perk.description}</p>
               </div>
             ))}
           </div>
