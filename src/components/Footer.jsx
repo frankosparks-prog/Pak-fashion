@@ -116,7 +116,7 @@
 // export default Footer;
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Facebook, Instagram, Mail } from "lucide-react";
+import { Facebook, Instagram } from "lucide-react";
 
 function Footer() {
   const [activeModal, setActiveModal] = useState(null); // 'terms', 'returns', 'privacy', 'shipping'

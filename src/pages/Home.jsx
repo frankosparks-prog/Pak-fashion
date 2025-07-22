@@ -327,7 +327,7 @@ function Home() {
             Why Shop With Us?
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
             {perks.map((perk, idx) => (
               <div
                 key={idx}
