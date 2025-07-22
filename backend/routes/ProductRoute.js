@@ -32,6 +32,7 @@ router.get("/", async (req, res) => {
     const {
       search = "",
       category,
+      subCategory,
       maxPrice,
       tag,
       collection,
@@ -44,6 +45,7 @@ router.get("/", async (req, res) => {
     };
 
     if (category) query.category = category;
+    if (subCategory) query.subCategory = subCategory;
     if (tag) query.tag = tag;
     if (collection) query.collection = collection;
     if (maxPrice) query.price = { $lte: parseFloat(maxPrice) };

@@ -12,15 +12,44 @@ const Categories = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [subCategory, setSubCategory] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 8;
+
+  const subCategoryOptions = {
+    "Men's Clothing": [
+      "All",
+      "Suits",
+      "Blazers",
+      "Tops",
+      "Bottoms",
+      "Jackets & Coats",
+    ],
+    "Women's Clothing": [
+      "All",
+      "Dresses",
+      "Tops",
+      "Bottoms",
+      "Jackets & Coats",
+    ],
+    "Kids' Clothing": ["All", "Tops", "Bottoms"],
+    Shoes: ["All"],
+    "Bags & Accessories": ["All"],
+    "Clearance Sale": ["All"],
+  };
 
   useEffect(() => {
     const fetchCategoryProducts = async () => {
       try {
         setLoading(true);
+        const subQuery =
+          subCategory !== "All"
+            ? `&subCategory=${encodeURIComponent(subCategory)}`
+            : "";
         const res = await axios.get(
           `${SERVER_URL}/api/products?category=${encodeURIComponent(
             categoryName
-          )}`
+          )}${subQuery}`
         );
         setProducts(res.data);
       } catch (err) {
@@ -31,7 +60,19 @@ const Categories = () => {
     };
 
     fetchCategoryProducts();
-  }, [categoryName]);
+  }, [categoryName, subCategory]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [categoryName, subCategory]);
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
+  const totalPages = Math.ceil(products.length / productsPerPage);
 
   return (
     <div className="min-h-screen px-6 py-20 mt-12 bg-white text-black">
@@ -83,6 +124,24 @@ const Categories = () => {
             {categoryName}
           </span>
         </h1>
+        {/* Subcategory Filter Buttons */}
+        {(subCategoryOptions[categoryName] || []).length > 1 && (
+          <div className="flex flex-wrap gap-3 justify-center mb-10">
+            {subCategoryOptions[categoryName].map((sub) => (
+              <button
+                key={sub}
+                onClick={() => setSubCategory(sub)}
+                className={`px-4 py-2 rounded-full text-sm font-semibold border ${
+                  subCategory === sub
+                    ? "bg-yellow-400 text-black border-yellow-600"
+                    : "bg-white text-gray-700 border-gray-300 hover:bg-yellow-50"
+                }`}
+              >
+                {sub}
+              </button>
+            ))}
+          </div>
+        )}
 
         {loading ? (
           <div className="flex justify-center items-center py-20">
@@ -98,7 +157,7 @@ const Categories = () => {
           </p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
-            {products.map((product) => (
+            {currentProducts.map((product) => (
               <Link
                 to={`/product/${product._id}`}
                 key={product._id}
@@ -121,12 +180,47 @@ const Categories = () => {
                     />
                   ))}
                 </div>
-                <p className="text-sm text-gray-600">{product.category}</p>
+                <p className="text-sm text-gray-600">{product.category} | {product.subCategory} </p>
               </Link>
             ))}
           </div>
         )}
       </div>
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center mt-10 gap-2 flex-wrap">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+          >
+            Prev
+          </button>
+
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`px-3 py-1 rounded-full ${
+                currentPage === i + 1
+                  ? "bg-yellow-500 text-white"
+                  : "bg-gray-100 text-gray-800"
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
+
+          <button
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -244,8 +244,8 @@ function Contact() {
             "@type": "Organization",
             name: "Pak Fashions",
             url: "https://pakfashions.co.ke",
-            email: "info@pakfashion.co.za",
-            telephone: "+254 726 329 260",
+            email: "pakfashionske@gmail.com",
+            telephone: "+254 724 835785",
             address: {
               "@type": "PostalAddress",
               streetAddress: "237G+MQ6, Nanyuki",
@@ -255,7 +255,7 @@ function Contact() {
             },
             contactPoint: {
               "@type": "ContactPoint",
-              telephone: "+254 726 329 260",
+              telephone: "+254 724 835785",
               contactType: "Customer Support",
               areaServed: "KE",
               availableLanguage: "en",
@@ -294,10 +294,10 @@ function Contact() {
             <div>
               <h3 className="text-xl font-bold mb-1">Email</h3>
               <a
-                href="mailto:info@pakfashion.co.za"
+                href="mailto:pakfashionske@gmail.com"
                 className="text-gray-800 hover:underline break-words"
               >
-                info@pakfashion.co.za
+                pakfashionske@gmail.com
               </a>
             </div>
           </div>
@@ -307,10 +307,17 @@ function Contact() {
             <div>
               <h3 className="text-xl font-bold mb-1">Phone</h3>
               <a
-                href="tel:+254726329260"
+                href="tel:+254724835785"
                 className="text-gray-800 hover:underline"
               >
-                +254 726 329 260
+                +254 724 835785
+              </a>
+              &nbsp;|&nbsp;
+              <a
+                href="tel:+254720146386"
+                className="text-gray-800 hover:underline"
+              >
+                +254 720 146386
               </a>
             </div>
           </div>
@@ -320,7 +327,7 @@ function Contact() {
             <div>
               <h3 className="text-xl font-bold mb-1">Visit Us</h3>
               <p className="text-gray-800">
-                Pak Fashions Clothes, Behind Lumumba Road, Nanyuki
+                Pak Fashions Clothes, Pak Fashions 1 at Juba House and Pak Fashions 2 at Napolitana building, Nanyuki
               </p>
             </div>
           </div>
@@ -402,7 +409,7 @@ function Contact() {
 
       {/* WhatsApp Floating Button */}
       <a
-        href="https://wa.me/254726329260?text=Hello!%20I%20have%20a%20question%20about%20pakfashions%20products."
+        href="https://wa.me/254724835785?text=Hello!%20I%20have%20a%20question%20about%20pakfashions%20products."
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-8 right-8 bg-green-500 text-white p-2 rounded-full shadow-lg hover:bg-green-600 transition z-50 animate-bounce"

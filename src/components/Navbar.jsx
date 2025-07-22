@@ -353,21 +353,21 @@ function Navbar() {
             </button>
             <Link
               to="/"
-              className="flex items-center gap-2 md:gap-3 px-2 py-1 select-none focus:outline-none focus:ring-2 focus:ring-black   rounded-lg group"
+              className="flex items-center gap-2 md:gap-3 px-2 py-1 select-none focus:outline-none focus:ring-2 focus:ring-black rounded-lg group"
               aria-label="Homepage"
             >
               <img
                 src="./PakFashions-logo.jpg"
                 alt="PakFashion Logo"
-                className="w-10 h-10 rounded-full border-2 border-yellow-500 object-cover shadow-md group-hover:scale-105 transition"
+                className="w-10 h-10 rounded-full border-2 border-yellow-500 object-cover shadow-md group-hover:scale-105 transition hidden md:block"
               />
               
               {/* <div className="flex items-center space-x-1 md:space-x-2 text-blue-700 font-semibold text-sm md:text-base">
                 <span className="hidden sm:inline">||</span>
                 <span className="hidden sm:inline">-&gt;&gt;</span>
               </div> */}
-              <span className="text-xl md:text-2xl font-extrabold text-black tracking-tight bg-yellow-400 px-3 py-1 rounded-full shadow-sm">
-                PakFashions&nbsp;
+              <span className="text-xl md:text-2xl font-bold text-black tracking-tight bg-yellow-400 px-3 py-1 rounded-full shadow-sm">
+                Pak Fashions&nbsp;
                 <span className="hidden sm:inline">Nanyuki</span>
               </span>
               {/* <span className="text-xl md:text-2xl font-extrabold text-blue-800 tracking-tight bg-blue-50 rounded-full px-3 py-1 shadow-sm">
@@ -486,7 +486,7 @@ function Navbar() {
 
       {/* ------------- MOBILE SIDEBAR ------------- */}
       <aside
-        className={`fixed top-0 left-0 h-full w-72 bg-yellow-100 shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 h-full w-72 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         aria-label="Mobile menu"

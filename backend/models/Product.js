@@ -24,6 +24,15 @@ const productSchema = new mongoose.Schema({
 ],
     required: true,
   },
+  subCategory: {
+    type: String,
+    enum: [
+      "Dresses", "Tops", "Bottoms", "Jackets & Coats",
+      "Suits", "Blazers",
+      "Other"
+    ],
+    required: false
+  },
   inStock: {
     type: Boolean,
     default: true,
@@ -32,11 +41,6 @@ const productSchema = new mongoose.Schema({
     type: String,
     enum: ['New Arrival', 'Bestseller', 'Featured'],
     default: 'New Arrival',
-  },
-  collection: {
-    type: String,
-    enum: ['Instagram', ''],
-    default: '',
   },
   dateAdded: { type: Date, default: Date.now },
   rating: { type: Number, min: 0, max: 5, default: 0 },

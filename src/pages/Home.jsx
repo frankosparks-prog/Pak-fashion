@@ -4,7 +4,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Truck, Sparkles, Users, Gift } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
@@ -15,11 +15,32 @@ const fontLink = (
     rel="stylesheet"
   />
 );
-
+const perks = [
+  {
+    icon: <Truck className="h-8 w-8 text-yellow-500" />,
+    title: "Fast & Global Delivery",
+    description: "From Nanyuki to the world – get your order wherever you are!",
+  },
+  {
+    icon: <Sparkles className="h-8 w-8 text-yellow-500" />,
+    title: "New Styles Weekly",
+    description:
+      "Fresh drops every week. Follow us @pakfashions to stay trendy.",
+  },
+  {
+    icon: <Users className="h-8 w-8 text-yellow-500" />,
+    title: "Loved by Fashionistas",
+    description: "Hundreds of happy icons across Kenya and beyond!",
+  },
+  {
+    icon: <Gift className="h-8 w-8 text-yellow-500" />,
+    title: "Give the Gift of Style",
+    description: "We offer stylish gift cards for your loved ones.",
+  },
+];
 function Home() {
   const [featured, setFeatured] = useState([]);
-  const [blogs, setBlogs] = useState([]);
-  const [instagram, setInstagram] = useState([]);
+  // const [blogs, setBlogs] = useState([]);
   const [faq, setFaq] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
   const [email, setEmail] = useState("");
@@ -31,18 +52,15 @@ function Home() {
 
   const fetchData = async () => {
     try {
-      const [featuredRes, blogsRes, instaRes, faqRes, testimonialsRes] =
-        await Promise.all([
-          axios.get(`${SERVER_URL}/api/products?tag=Featured&limit=3`),
-          axios.get(`${SERVER_URL}/api/blogs?limit=3`),
-          axios.get(`${SERVER_URL}/api/products?collection=Instagram&limit=6`),
-          axios.get(`${SERVER_URL}/api/faq`),
-          axios.get(`${SERVER_URL}/api/testimonials`),
-        ]);
+      const [featuredRes, faqRes, testimonialsRes] = await Promise.all([
+        axios.get(`${SERVER_URL}/api/products?tag=Featured&limit=3`),
+        // axios.get(`${SERVER_URL}/api/blogs?limit=3`),
+        axios.get(`${SERVER_URL}/api/faq`),
+        axios.get(`${SERVER_URL}/api/testimonials`),
+      ]);
 
       setFeatured(featuredRes.data);
-      setBlogs(blogsRes.data);
-      setInstagram(instaRes.data);
+      // setBlogs(blogsRes.data);
       setFaq(faqRes.data);
       setTestimonials(testimonialsRes.data);
     } catch (error) {
@@ -266,7 +284,7 @@ function Home() {
         </section>
 
         {/* Blog Section */}
-        <section className="bg-white py-20 px-6">
+        {/* <section className="bg-white py-20 px-6">
           <h2
             className="text-4xl font-bold text-center text-yellow-600 mb-14"
             data-aos="fade-up"
@@ -300,28 +318,29 @@ function Home() {
               </div>
             ))}
           </div>
-        </section>
-
-        {/* Instagram Grid */}
+        </section> */}
         <section className="bg-yellow-50 py-20 px-6">
           <h2
-            className="text-4xl font-bold text-center text-black mb-10"
+            className="text-4xl font-bold text-center text-black mb-12"
             data-aos="fade-up"
           >
-            #PakFashions
+            Why Shop With Us?
           </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 max-w-6xl mx-auto">
-            {instagram.map((item, index) => (
-              <Link to={`/product/${item._id}`}>
-              <img
-                key={item._id}
-                src={item.image}
-                alt="beaded"
-                className="w-full h-full object-cover hover:scale-110 transition-transform duration-300 rounded-lg"
-                data-aos="zoom-in"
-                data-aos-delay={index * 100}
-              />
-              </Link>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+            {perks.map((perk, idx) => (
+              <div
+                key={idx}
+                className="bg-white p-6 rounded-2xl shadow hover:shadow-xl text-center transition duration-300 transform hover:-translate-y-1"
+                data-aos="fade-up"
+                data-aos-delay={idx * 150}
+              >
+                <div className="flex justify-center mb-4">{perk.icon}</div>
+                <h3 className="text-lg font-semibold text-yellow-600 mb-2">
+                  {perk.title}
+                </h3>
+                <p className="text-gray-700 text-sm">{perk.description}</p>
+              </div>
             ))}
           </div>
         </section>
