@@ -42,6 +42,8 @@ function Home() {
   // const [blogs, setBlogs] = useState([]);
   const [faq, setFaq] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
+  const [newArrivals, setNewArrivals] = useState([]);
+  const [bestSeller, setBestSeller] = useState([]);
   useEffect(() => {
     AOS.init({ duration: 1100, once: true });
     // Fetch all dynamic content
@@ -50,17 +52,27 @@ function Home() {
 
   const fetchData = async () => {
     try {
-      const [featuredRes, faqRes, testimonialsRes] = await Promise.all([
-        axios.get(`${SERVER_URL}/api/products?category=Clearance Sale&limit=3`),
+      const [
+        featuredRes,
+        faqRes,
+        testimonialsRes,
+        newArrivalsRes,
+        bestSellerRes,
+      ] = await Promise.all([
+        axios.get(`${SERVER_URL}/api/products?category=Clearance Sale&limit=4`),
         // axios.get(`${SERVER_URL}/api/blogs?limit=3`),
         axios.get(`${SERVER_URL}/api/faq`),
         axios.get(`${SERVER_URL}/api/testimonials`),
+        axios.get(`${SERVER_URL}/api/products?tag=New Arrival&limit=4`),
+        axios.get(`${SERVER_URL}/api/products?tag=Bestseller&limit=4`),
       ]);
 
       setFeatured(featuredRes.data);
       // setBlogs(blogsRes.data);
       setFaq(faqRes.data);
       setTestimonials(testimonialsRes.data);
+      setNewArrivals(newArrivalsRes.data);
+      setBestSeller(bestSellerRes.data);
     } catch (error) {
       console.error("Failed to fetch homepage data:", error);
     }
@@ -152,16 +164,15 @@ function Home() {
             className="text-4xl md:text-6xl font-extrabold drop-shadow mt-8"
             data-aos="fade-down"
           >
-            <span className="text-yellow-600">Stylish Clothes</span> & More{" "}
+            <span className="text-yellow-600">Where style meets </span>{" "}
             <br />
-            At <span className="text-yellow-600">Unbeatable Prices</span>
+            every generation{" "}
           </h1>
           <p
             className="mt-4 md:mt-6 max-w-xl text-base md:text-xl text-yellow-100 font-medium"
             data-aos="fade-up"
           >
-            Discover quality loved fashion — refresh your wardrobe without
-            hurting the planet.
+            Fashion that fits you and your budget.
           </p>
           <Link to="/shop" className="mt-6 md:mt-10" data-aos="zoom-in">
             <button className="bg-yellow-500 text-black font-semibold px-8 md:px-10 py-3 md:py-4 rounded-full shadow hover:brightness-110 transform hover:scale-105 transition">
@@ -189,13 +200,48 @@ function Home() {
           </p>
         </section> */}
 
-        {/* Featured Creations */}
+        {/* New Arrivals*/}
         <section className="bg-yellow-50 py-20 px-6">
           <h2
             className="text-4xl font-bold text-center text-black mb-14"
             data-aos="fade-up"
           >
-            Top Sales
+            New Arrivals
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 max-w-6xl mx-auto">
+            {newArrivals.map((item, index) => (
+              <Link to={`/product/${item._id}`}>
+                <div
+                  key={item._id}
+                  className="bg-white rounded-lg p-6 shadow hover:shadow-xl hover:-translate-y-2 transition transform"
+                  data-aos="zoom-in"
+                  data-aos-delay={index * 150}
+                >
+                  <div
+                    className="h-56 bg-cover bg-center rounded-lg mb-4"
+                    style={{ backgroundImage: `url(${item.image})` }}
+                  ></div>
+                  <h3 className="text-xl font-bold text-yellow-600 mb-2">
+                    {item.name}
+                  </h3>
+                  <p className="text-gray-600 mb-3 text-sm">
+                    {item.description}
+                  </p>
+                  <span className="text-black font-semibold">
+                    ksh {item.price}
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className="bg-yellow-50 py-20 px-6">
+          <h2
+            className="text-4xl font-bold text-center text-black mb-14"
+            data-aos="fade-up"
+          >
+            Sale upto 50% Off
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 max-w-6xl mx-auto">
             {featured.map((item, index) => (
@@ -223,15 +269,50 @@ function Home() {
               </Link>
             ))}
           </div>
+        </section>
+
+        {/* Best Sellers */}
+        <section className="bg-yellow-50 py-20 px-6">
+          <h2
+            className="text-4xl font-bold text-center text-black mb-14"
+            data-aos="fade-up"
+          >
+            Best Seller
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 max-w-6xl mx-auto">
+            {bestSeller.map((item, index) => (
+              <Link to={`/product/${item._id}`}>
+                <div
+                  key={item._id}
+                  className="bg-white rounded-lg p-6 shadow hover:shadow-xl hover:-translate-y-2 transition transform"
+                  data-aos="zoom-in"
+                  data-aos-delay={index * 150}
+                >
+                  <div
+                    className="h-56 bg-cover bg-center rounded-lg mb-4"
+                    style={{ backgroundImage: `url(${item.image})` }}
+                  ></div>
+                  <h3 className="text-xl font-bold text-yellow-600 mb-2">
+                    {item.name}
+                  </h3>
+                  <p className="text-gray-600 mb-3 text-sm">
+                    {item.description}
+                  </p>
+                  <span className="text-black font-semibold">
+                    ksh {item.price}
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
           <div className="text-center mt-10">
             <Link to="/shop">
-              <button className="bg-blue-700 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition">
+              <button className="bg-yellow-700 text-white px-6 py-2 rounded-lg hover:bg-yellow-800 transition">
                 View All Products
               </button>
             </Link>
           </div>
         </section>
-
         {/* Blog Section */}
         {/* <section className="bg-white py-20 px-6">
           <h2
@@ -330,7 +411,7 @@ function Home() {
         </section>
 
         {/* FAQ */}
-        <section className="bg-white py-20 px-6 max-w-4xl mx-auto">
+        {/* <section className="bg-white py-20 px-6 max-w-4xl mx-auto">
           <h2
             className="text-4xl font-bold text-center text-black mb-10"
             data-aos="fade-up"
@@ -358,7 +439,7 @@ function Home() {
               Read More <ArrowRight className="ml-2" size={18} />
             </Link>
           </div>
-        </section>
+        </section> */}
       </main>
     </>
   );
