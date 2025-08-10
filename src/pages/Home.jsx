@@ -40,7 +40,7 @@ const perks = [
 function Home() {
   const [featured, setFeatured] = useState([]);
   // const [blogs, setBlogs] = useState([]);
-  const [faq, setFaq] = useState([]);
+  // const [faq, setFaq] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
   const [newArrivals, setNewArrivals] = useState([]);
   const [bestSeller, setBestSeller] = useState([]);
@@ -54,14 +54,14 @@ function Home() {
     try {
       const [
         featuredRes,
-        faqRes,
+        // faqRes,
         testimonialsRes,
         newArrivalsRes,
         bestSellerRes,
       ] = await Promise.all([
         axios.get(`${SERVER_URL}/api/products?category=Clearance Sale&limit=4`),
         // axios.get(`${SERVER_URL}/api/blogs?limit=3`),
-        axios.get(`${SERVER_URL}/api/faq`),
+        // axios.get(`${SERVER_URL}/api/faq`),
         axios.get(`${SERVER_URL}/api/testimonials`),
         axios.get(`${SERVER_URL}/api/products?tag=New Arrival&limit=4`),
         axios.get(`${SERVER_URL}/api/products?tag=Bestseller&limit=4`),
@@ -69,7 +69,7 @@ function Home() {
 
       setFeatured(featuredRes.data);
       // setBlogs(blogsRes.data);
-      setFaq(faqRes.data);
+      // setFaq(faqRes.data);
       setTestimonials(testimonialsRes.data);
       setNewArrivals(newArrivalsRes.data);
       setBestSeller(bestSellerRes.data);
