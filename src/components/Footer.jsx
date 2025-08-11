@@ -19,7 +19,8 @@ function Footer() {
       toast.success("Thanks for subscribing!");
       setEmail("");
     } catch (err) {
-      toast.error("Subscription failed. Please try again.");
+      // toast.error("Subscription failed. Please try again.");
+      toast.error(err.response?.data?.message || "An error occurred. Please try again.");
       console.error(err);
     }
   };

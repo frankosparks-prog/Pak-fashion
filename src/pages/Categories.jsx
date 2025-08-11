@@ -102,7 +102,7 @@ const Categories = () => {
         />
         <meta
           property="og:image"
-          content="https://pakfashions.co.ke/images/category-banner.png"
+          content="https://pakfashions.co.ke/pak-fashion.jpg"
         />
 
         {/* Twitter Card */}

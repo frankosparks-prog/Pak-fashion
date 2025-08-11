@@ -261,9 +261,9 @@ function Contact() {
               availableLanguage: "en",
             },
             sameAs: [
-              "https://wa.me/27112223333",
-              "https://facebook.com/your-page",
-              "https://instagram.com/your-page",
+              "https://wa.me/2724835785",
+              "https://web.facebook.com/PAKFASHIONSKE",
+              "https://www.instagram.com/pakfashionske?igsh=MXZsbXd3YnRhamltYg==",
             ],
           })}
         </script>

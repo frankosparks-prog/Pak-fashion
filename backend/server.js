@@ -32,7 +32,8 @@ const allowedOrigins = [
   "http://localhost:3001",
   "http://192.168.59.151:3001", // For local network access
   "http://192.168.101.234:3000", // For local network access
-  "https://pak-fashion.onrender.com", // For production on render.com
+  "https://pakfashions.co.ke", // For production
+  "https://www.pakfashions.co.ke", // For production
 ];
 
 app.use(cors({

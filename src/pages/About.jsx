@@ -77,8 +77,8 @@ function About() {
               availableLanguage: ["English", "Swahili"],
             },
             sameAs: [
-              "https://facebook.com/pakfashions",
-              "https://instagram.com/pakfashions",
+              "https://web.facebook.com/PAKFASHIONSKE",
+              "https://www.instagram.com/pakfashionske?igsh=MXZsbXd3YnRhamltYg==",
             ],
           })}
         </script>

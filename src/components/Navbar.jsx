@@ -339,21 +339,19 @@ function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
           {/* logo + mobile toggle */}
-          <div className="flex items-center gap-5">
-            {/* <button
-              onClick={toggleSidebar}
-              className="md:hidden text-blue-700 hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-600 rounded"
-              aria-label="Open menu"
-            > */}
+          <div className="relative flex flex-1 md:flex-none justify-center md:justify-start items-center">
+            {/* Mobile menu button - absolute on left */}
             <button
               onClick={toggleSidebar}
-              className="md:hidden text-yellow-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded"
+              className="absolute left-0 md:hidden text-yellow-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded"
             >
               <Menu size={26} />
             </button>
+
+            {/* Logo + Name */}
             <Link
               to="/"
-              className="flex items-center gap-2 md:gap-3 px-2 py-1 select-none focus:outline-none focus:ring-2 focus:ring-black rounded-lg group"
+              className="flex items-center gap-2 md:gap-3 px-2 py-1 select-none focus:outline-none rounded-lg group"
               aria-label="Homepage"
             >
               <img
@@ -361,19 +359,9 @@ function Navbar() {
                 alt="PakFashion Logo"
                 className="w-10 h-10 rounded-full border-2 border-yellow-500 object-cover shadow-md group-hover:scale-105 transition hidden md:block"
               />
-              
-              {/* <div className="flex items-center space-x-1 md:space-x-2 text-blue-700 font-semibold text-sm md:text-base">
-                <span className="hidden sm:inline">||</span>
-                <span className="hidden sm:inline">-&gt;&gt;</span>
-              </div> */}
-              <span className="text-xl md:text-2xl font-extrabold text-black tracking-tight px-3 py-1 rounded-full shadow-sm ml-20 md:ml-0">
+              <span className="text-xl md:text-2xl font-extrabold text-black tracking-tight px-3 py-1 rounded-full shadow-sm text-center">
                 PAKFASHIONS
-                {/* <span className="hidden sm:inline">Nanyuki</span> */}
               </span>
-              {/* <span className="text-xl md:text-2xl font-extrabold text-blue-800 tracking-tight bg-blue-50 rounded-full px-3 py-1 shadow-sm">
-                PakFashion&nbsp;
-                <span className="hidden sm:inline">Nanyuki</span>
-              </span> */}
             </Link>
           </div>
 
@@ -446,7 +434,6 @@ function Navbar() {
                   label="Clearance Sale"
                   icon={<Box size={16} />}
                 />
-               
               </div>
             </div>
 

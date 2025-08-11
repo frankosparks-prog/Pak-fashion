@@ -141,8 +141,8 @@ function Home() {
             email: "info@pakfashion.co.za",
             url: "https://pakfashions.co.ke",
             sameAs: [
-              "https://facebook.com/pakfashions",
-              "https://instagram.com/pakfashions",
+              "https://web.facebook.com/PAKFASHIONSKE",
+              "https://www.instagram.com/pakfashionske?igsh=MXZsbXd3YnRhamltYg==",
             ],
             openingHours: "Mo-Su 07:00-21:00",
           })}
