@@ -6,7 +6,7 @@ import { FaWhatsapp } from "react-icons/fa";
 import { Helmet } from "react-helmet-async";
 
 function Cart() {
-  const phoneNumber = "254738380692";
+  const phoneNumber = "254724835785"; // Replace with your WhatsApp number
   const { cartItems, removeFromCart, updateQuantity } = useCart();
   // const navigate = useNavigate();
 
